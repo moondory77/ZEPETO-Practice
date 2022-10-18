@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: df2f950b6bbad48bb910362cc26ae6ca
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nclass Clicker extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    Start() {\r\n        this.clickBtn.onClick.AddListener(() => {\r\n           
+    console.log(''btnUI onClick'');\r\n            this.OnClickButton();\r\n       
+    });\r\n    }\r\n    OnClickButton() {\r\n        this.multiplay = this.gameObject.GetComponent($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
+    this.multiplay.Room.Send(\"Click\", \"ClickBTN\");\r\n    }\r\n}\r\nexports.default
+    = Clicker;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ2xpY2tlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkNsaWNrZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFHckQsK0NBQW9EO0FBRXBELE1BQXFCLE9BQVEsU0FBUSxxQ0FBcUI7SUFJdEQsS0FBSztRQUNELElBQUksQ0FBQyxRQUFRLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxHQUFHLEVBQUU7WUFDbkMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsQ0FBQztZQUM3QixJQUFJLENBQUMsYUFBYSxFQUFFLENBQUM7UUFDekIsQ0FBQyxDQUFDLENBQUM7SUFDUCxDQUFDO0lBQ0QsYUFBYTtRQUNULElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDLFVBQVUsQ0FBQyxZQUFZLFNBQUMsbUNBQW9CLEVBQUcsQ0FBQztRQUN0RSxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxFQUFDLFVBQVUsQ0FBQyxDQUFDO0lBQ2pELENBQUM7Q0FDSjtBQWRELDBCQWNDIn0=","assetPath":"Assets/MyScript/Clicker.ts","manifest":{"properties":[{"assembly":"UnityEngine.UI","name":"clickBtn","type":"UnityEngine.UI.Button","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"Clicker","description":""},"isCompiled":true}'
+  typescriptHash: 17810bc99a8614ff804c1eb0e0655e97
+  onlyWriteTrigger: 0
