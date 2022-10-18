@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 5419c5d1d2ede4cde844dd059edfebce
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: "{\"source\":\"\\\"use strict\\\";\\r\\nObject.defineProperty(exports,
+    \\\"__esModule\\\", { value: true });\\r\\nconst ZEPETO_Script_1 = require(\\\"ZEPETO.Script\\\");\\r\\nclass
+    BoxSyncHelper extends ZEPETO_Script_1.ZepetoScriptBehaviour {\\r\\n    Start()
+    {\\r\\n        //\uB3D9\uAE30\uD654 \uD558\uC9C0 \uC54A\uC74C\\r\\n        if
+    (this.SyncSet == 0 /* NoneSync */) {\\r\\n            console.log(this.name);\\r\\n       
+    }\\r\\n        // \uB3D9\uAE30\uD654 \uD568\\r\\n        else if (this.SyncSet
+    == 1 /* Sync */) {\\r\\n            console.log(this.name);\\r\\n        }\\r\\n   
+    }\\r\\n}\\r\\nexports.default = BoxSyncHelper;\\r\\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm94U3luY0hlbHBlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkJveFN5bmNIZWxwZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFPckQsTUFBcUIsYUFBYyxTQUFRLHFDQUFxQjtJQUU1RCxLQUFLO1FBQ0QsV0FBVztRQUNYLElBQUcsSUFBSSxDQUFDLE9BQU8sb0JBQTBCLEVBQUM7WUFDdEMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUE7U0FDekI7UUFDRCxRQUFRO2FBQ0gsSUFBRyxJQUFJLENBQUMsT0FBTyxnQkFBc0IsRUFBQztZQUN2QyxPQUFPLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQTtTQUN6QjtJQUNMLENBQUM7Q0FHSjtBQWRELGdDQWNDIn0=\",\"assetPath\":\"Assets/MyScript/BoxSyncHelper.ts\",\"manifest\":{\"properties\":[{\"assembly\":\"\",\"name\":\"SyncSet\",\"type\":\"UpdateAuthority\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[\"NoneSync\",\"Sync\"],\"enumValues\":[\"0\",\"1\"],\"attributes\":[]}],\"name\":\"BoxSyncHelper\",\"description\":\"\"},\"isCompiled\":true}"
+  typescriptHash: b7ad2cde84da628319e553c4a1b3f831
+  onlyWriteTrigger: 0
