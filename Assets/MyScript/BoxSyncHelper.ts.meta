@@ -19,12 +19,28 @@ ScriptedImporter:
   WrapperFilters: []
   wrapperOutputDirectory: Generated
   compiledResult: "{\"source\":\"\\\"use strict\\\";\\r\\nObject.defineProperty(exports,
-    \\\"__esModule\\\", { value: true });\\r\\nconst ZEPETO_Script_1 = require(\\\"ZEPETO.Script\\\");\\r\\nclass
-    BoxSyncHelper extends ZEPETO_Script_1.ZepetoScriptBehaviour {\\r\\n    Start()
-    {\\r\\n        //\uB3D9\uAE30\uD654 \uD558\uC9C0 \uC54A\uC74C\\r\\n        if
-    (this.SyncSet == 0 /* NoneSync */) {\\r\\n            console.log(this.name);\\r\\n       
+    \\\"__esModule\\\", { value: true });\\r\\nconst UnityEngine_1 = require(\\\"UnityEngine\\\");\\r\\nconst
+    ZEPETO_Script_1 = require(\\\"ZEPETO.Script\\\");\\r\\nconst multiplaySample_1
+    = require(\\\"./multiplaySample\\\");\\r\\nclass BoxSyncHelper extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\\r\\n    Start() {\\r\\n        //\uB3D9\uAE30\uD654 \uD558\uC9C0 \uC54A\uC74C\\r\\n       
+    if (this.SyncSet == 0 /* NoneSync */) {\\r\\n            console.log(this.name);\\r\\n       
     }\\r\\n        // \uB3D9\uAE30\uD654 \uD568\\r\\n        else if (this.SyncSet
-    == 1 /* Sync */) {\\r\\n            console.log(this.name);\\r\\n        }\\r\\n   
-    }\\r\\n}\\r\\nexports.default = BoxSyncHelper;\\r\\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm94U3luY0hlbHBlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkJveFN5bmNIZWxwZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFPckQsTUFBcUIsYUFBYyxTQUFRLHFDQUFxQjtJQUU1RCxLQUFLO1FBQ0QsV0FBVztRQUNYLElBQUcsSUFBSSxDQUFDLE9BQU8sb0JBQTBCLEVBQUM7WUFDdEMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUE7U0FDekI7UUFDRCxRQUFRO2FBQ0gsSUFBRyxJQUFJLENBQUMsT0FBTyxnQkFBc0IsRUFBQztZQUN2QyxPQUFPLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQTtTQUN6QjtJQUNMLENBQUM7Q0FHSjtBQWRELGdDQWNDIn0=\",\"assetPath\":\"Assets/MyScript/BoxSyncHelper.ts\",\"manifest\":{\"properties\":[{\"assembly\":\"\",\"name\":\"SyncSet\",\"type\":\"UpdateAuthority\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[\"NoneSync\",\"Sync\"],\"enumValues\":[\"0\",\"1\"],\"attributes\":[]}],\"name\":\"BoxSyncHelper\",\"description\":\"\"},\"isCompiled\":true}"
-  typescriptHash: b7ad2cde84da628319e553c4a1b3f831
+    == 1 /* Sync */) {\\r\\n            console.log(this.name);\\r\\n           
+    this.StartCoroutine(this.SyncPostionReceive());\\r\\n            this.StartCoroutine(this.SyncPositionSend());\\r\\n       
+    }\\r\\n    }\\r\\n    //\uC77C\uC815 \uC2DC\uAC04\uB9C8\uB2E4 \uC11C\uBC84\uB85C
+    \uD604\uC7AC \uC704\uCE58\uB97C \uBCF4\uB0C4\\r\\n    *SyncPositionSend() {\\r\\n       
+    while (true) {\\r\\n            yield new UnityEngine_1.WaitForSeconds(2);\\r\\n           
+    this.multiplay = multiplaySample_1.default.GetInstance();\\r\\n            if
+    (this.multiplay != null) {\\r\\n                let boxPos = this.transform.position;\\r\\n               
+    this.multiplay.room.Send(\\\"boxPos\\\", boxPos);\\r\\n            }\\r\\n       
+    }\\r\\n    }\\r\\n    //\uC11C\uBC84\uB85C\uBD80\uD130 \uBC1B\uC740 \uC704\uCE58\uB85C
+    \uB3D9\uAE30\uD654\\r\\n    *SyncPostionReceive() {\\r\\n        yield new UnityEngine_1.WaitForSeconds(2);\\r\\n       
+    this.multiplay = multiplaySample_1.default.GetInstance();\\r\\n        if (this.multiplay
+    != null) {\\r\\n            this.multiplay.room.AddMessageHandler(\\\"boxPos\\\",
+    (message) => {\\r\\n                // print server message\\r\\n               
+    console.log(message);\\r\\n            });\\r\\n        }\\r\\n    }\\r\\n   
+    ParseVector3(vector3) {\\r\\n        return new UnityEngine_1.Vector3(vector3.x,
+    vector3.y, vector3.z);\\r\\n    }\\r\\n}\\r\\nexports.default = BoxSyncHelper;\\r\\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm94U3luY0hlbHBlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkJveFN5bmNIZWxwZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBc0Q7QUFDdEQsaURBQXNEO0FBQ3RELHVEQUFnRDtBQU9oRCxNQUFxQixhQUFjLFNBQVEscUNBQXFCO0lBRzlELEtBQUs7UUFDSCxXQUFXO1FBQ1gsSUFBSSxJQUFJLENBQUMsT0FBTyxvQkFBNEIsRUFBRTtZQUM1QyxPQUFPLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQztTQUN4QjtRQUNELFFBQVE7YUFDSCxJQUFJLElBQUksQ0FBQyxPQUFPLGdCQUF3QixFQUFFO1lBQzdDLE9BQU8sQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO1lBQ3ZCLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLGtCQUFrQixFQUFFLENBQUMsQ0FBQztZQUMvQyxJQUFJLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxnQkFBZ0IsRUFBRSxDQUFDLENBQUM7U0FDOUM7SUFDSCxDQUFDO0lBRUQsdUJBQXVCO0lBQ3ZCLENBQUMsZ0JBQWdCO1FBQ2YsT0FBTyxJQUFJLEVBQUU7WUFDWCxNQUFNLElBQUksNEJBQWMsQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUM1QixJQUFJLENBQUMsU0FBUyxHQUFHLHlCQUFlLENBQUMsV0FBVyxFQUFFLENBQUM7WUFDL0MsSUFBSSxJQUFJLENBQUMsU0FBUyxJQUFJLElBQUksRUFBRTtnQkFDMUIsSUFBSSxNQUFNLEdBQVksSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUM7Z0JBQzlDLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUUsTUFBTSxDQUFDLENBQUM7YUFDNUM7U0FDRjtJQUNILENBQUM7SUFFRCxrQkFBa0I7SUFDbEIsQ0FBQyxrQkFBa0I7UUFDakIsTUFBTSxJQUFJLDRCQUFjLENBQUMsQ0FBQyxDQUFDLENBQUM7UUFDNUIsSUFBSSxDQUFDLFNBQVMsR0FBRyx5QkFBZSxDQUFDLFdBQVcsRUFBRSxDQUFDO1FBQy9DLElBQUksSUFBSSxDQUFDLFNBQVMsSUFBSSxJQUFJLEVBQUU7WUFDNUIsSUFBSSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMsUUFBUSxFQUFFLENBQUMsT0FBTyxFQUFFLEVBQUU7Z0JBQ3hELHVCQUF1QjtnQkFDdkIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQztZQUN6QixDQUFDLENBQUMsQ0FBQztTQUNGO0lBQ0gsQ0FBQztJQUdPLFlBQVksQ0FBQyxPQUFnQjtRQUNuQyxPQUFPLElBQUkscUJBQU8sQ0FBQyxPQUFPLENBQUMsQ0FBQyxFQUFFLE9BQU8sQ0FBQyxDQUFDLEVBQUUsT0FBTyxDQUFDLENBQUMsQ0FBQyxDQUFDO0lBQ3RELENBQUM7Q0FDRjtBQTVDRCxnQ0E0Q0MifQ==\",\"assetPath\":\"Assets/MyScript/BoxSyncHelper.ts\",\"manifest\":{\"properties\":[{\"assembly\":\"\",\"name\":\"SyncSet\",\"type\":\"UpdateAuthority\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[\"NoneSync\",\"Sync\"],\"enumValues\":[\"0\",\"1\"],\"attributes\":[]},{\"assembly\":\"\",\"name\":\"multiplay\",\"type\":\"/Users/user/Desktop/UnityProjects/Practice/Assets/MyScript/multiplaySample.default\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[]}],\"name\":\"BoxSyncHelper\",\"description\":\"\"},\"isCompiled\":true}"
+  typescriptHash: ea3930dc2decf08f7226a98bbb6049b8
   onlyWriteTrigger: 0

@@ -19,12 +19,19 @@ ScriptedImporter:
   WrapperFilters: []
   wrapperOutputDirectory: Generated
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nclass
-    BoxMover extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
-    {\r\n        super(...arguments);\r\n        this.moveSpeed = 1;\r\n    }\r\n   
-    Start() {\r\n    }\r\n    Update() {\r\n        if (this.transform.position.z
-    < -10)\r\n            this.moveSpeed = 1;\r\n        if (this.transform.position.z
-    > 10)\r\n            this.moveSpeed = -1;\r\n        this.transform.Translate(0,
-    0, 1 * this.moveSpeed);\r\n    }\r\n}\r\nexports.default = BoxMover;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm94TW92ZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJCb3hNb3Zlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLGlEQUFxRDtBQUVyRCxNQUFxQixRQUFTLFNBQVEscUNBQXFCO0lBQTNEOztRQUNZLGNBQVMsR0FBVSxDQUFDLENBQUM7SUFXakMsQ0FBQztJQVZHLEtBQUs7SUFFTCxDQUFDO0lBQ0QsTUFBTTtRQUNGLElBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxHQUFDLENBQUMsRUFBRTtZQUM1QixJQUFJLENBQUMsU0FBUyxHQUFHLENBQUMsQ0FBQztRQUN2QixJQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsR0FBQyxFQUFFO1lBQzNCLElBQUksQ0FBQyxTQUFTLEdBQUcsQ0FBQyxDQUFDLENBQUM7UUFDeEIsSUFBSSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDLEdBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxDQUFDO0lBQ3JELENBQUM7Q0FDSjtBQVpELDJCQVlDIn0=","assetPath":"Assets/MyScript/BoxMover.ts","manifest":{"properties":[],"name":"BoxMover","description":""},"isCompiled":true}'
-  typescriptHash: 0b0385e2f1c7ac3ca816729e744bc3dd
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nvar lookAt;\r\n(function (lookAt)
+    {\r\n    lookAt[lookAt[\"Pos1\"] = -1] = \"Pos1\";\r\n    lookAt[lookAt[\"Pos2\"]
+    = 1] = \"Pos2\";\r\n})(lookAt || (lookAt = {}));\r\nclass BoxMover extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.moveSpeed
+    = 0.1;\r\n        this._nowLookAt = lookAt.Pos2;\r\n    }\r\n    Start() {\r\n       
+    this._gotoPosition = this.TweenPosition2;\r\n        this._pos1 = UnityEngine_1.Vector3.op_Addition(this.transform.position,
+    this.TweenPosition1);\r\n        this._pos2 = UnityEngine_1.Vector3.op_Addition(this.transform.position,
+    this.TweenPosition2);\r\n        this._dir = (UnityEngine_1.Vector3.op_Subtraction(this.TweenPosition2,
+    this.TweenPosition1)).normalized;\r\n    }\r\n    Update() {\r\n        if (UnityEngine_1.Vector3.op_Equality(this.transform.position,
+    this._pos1))\r\n            this._gotoPosition = this._pos2;\r\n        if (UnityEngine_1.Vector3.op_Equality(this.transform.position,
+    this._pos2))\r\n            this._gotoPosition = this._pos1;\r\n        this.transform.position
+    = UnityEngine_1.Vector3.MoveTowards(this.transform.position, this._gotoPosition,
+    this.moveSpeed);\r\n    }\r\n}\r\nexports.default = BoxMover;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm94TW92ZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJCb3hNb3Zlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDZDQUFzQztBQUN0QyxpREFBcUQ7QUFFckQsSUFBSyxNQUdKO0FBSEQsV0FBSyxNQUFNO0lBQ1Asb0NBQU8sQ0FBQTtJQUNQLG1DQUFNLENBQUE7QUFDVixDQUFDLEVBSEksTUFBTSxLQUFOLE1BQU0sUUFHVjtBQUNELE1BQXFCLFFBQVMsU0FBUSxxQ0FBcUI7SUFBM0Q7O1FBRzhCLGNBQVMsR0FBVSxHQUFHLENBQUM7UUFJekMsZUFBVSxHQUFVLE1BQU0sQ0FBQyxJQUFJLENBQUM7SUFrQjVDLENBQUM7SUFiRyxLQUFLO1FBQ0QsSUFBSSxDQUFDLGFBQWEsR0FBRyxJQUFJLENBQUMsY0FBYyxDQUFDO1FBQ3pDLElBQUksQ0FBQyxLQUFLLEdBckJULHFCQUFPLENBZ0N1bXBCLFdBQVksQ0FYOW1wQixJQUFJLENBQUMsU0FBUyxDQUFDLFFBQVEsRUFBRyxJQUFJLENBQUMsY0FBYyxDQUFBLENBQUM7UUFDM0QsSUFBSSxDQUFDLEtBQUssR0F0QlQscUJBQU8sQ0FnQ3VtcEIsV0FBWSxDQVY5bXBCLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxFQUFHLElBQUksQ0FBQyxjQUFjLENBQUEsQ0FBQztRQUMzRCxJQUFJLENBQUMsSUFBSSxHQUFHLENBdkJYLHFCQUFPLENBZ0NxcnBCLGNBQWUsQ0FUL3JwQixJQUFJLENBQUMsY0FBYyxFQUFDLElBQUksQ0FBQyxjQUFjLEVBQUMsQ0FBQyxVQUFVLENBQUM7SUFDckUsQ0FBQztJQUNELE1BQU07UUFDRixJQTFCQyxxQkFBTyxDQWdDeXFxQixXQUFZLENBTjFycUIsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEVBQUksSUFBSSxDQUFDLEtBQUs7WUFDcEMsSUFBSSxDQUFDLGFBQWEsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDO1FBQ3BDLElBNUJDLHFCQUFPLENBZ0N5cXFCLFdBQVksQ0FKMXJxQixJQUFJLENBQUMsU0FBUyxDQUFDLFFBQVEsRUFBSSxJQUFJLENBQUMsS0FBSztZQUNwQyxJQUFJLENBQUMsYUFBYSxHQUFHLElBQUksQ0FBQyxLQUFLLENBQUM7UUFDcEMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBQUcscUJBQU8sQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEVBQUMsSUFBSSxDQUFDLGFBQWEsRUFBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUM7SUFDN0csQ0FBQztDQUNKO0FBekJELDJCQXlCQyJ9","assetPath":"Assets/MyScript/BoxMover.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"TweenPosition1","type":"UnityEngine.Vector3","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"TweenPosition2","type":"UnityEngine.Vector3","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"mscorlib","name":"moveSpeed","type":"System.Single","isArray":false,"initValue":["0.1"],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"BoxMover","description":""},"isCompiled":true}'
+  typescriptHash: 8e5055a4015d232b0e8d10f9185966fd
   onlyWriteTrigger: 0

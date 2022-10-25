@@ -1,15 +1,33 @@
+import { Vector3 } from 'UnityEngine';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 
+enum lookAt{
+    Pos1=-1,
+    Pos2=1  
+}
 export default class BoxMover extends ZepetoScriptBehaviour {
-    private moveSpeed:number = 1;
-    Start() {    
-
+    @SerializeField() private TweenPosition1:Vector3;
+    @SerializeField() private TweenPosition2:Vector3;
+    @SerializeField() private moveSpeed:number = 0.1;
+    
+    private _gotoPosition:Vector3;
+    
+    private _nowLookAt:lookAt = lookAt.Pos2;
+    private _pos1:Vector3;
+    private _pos2:Vector3;
+    private _dir:Vector3;
+    
+    Start() {
+        this._gotoPosition = this.TweenPosition2;
+        this._pos1 = this.transform.position + this.TweenPosition1;
+        this._pos2 = this.transform.position + this.TweenPosition2;
+        this._dir = (this.TweenPosition2-this.TweenPosition1).normalized;
     }
     Update() {
-        if(this.transform.position.z<-10)
-            this.moveSpeed = 1;
-        if(this.transform.position.z>10)
-            this.moveSpeed = -1;
-        this.transform.Translate(0, 0, 1*this.moveSpeed);
+        if(this.transform.position == this._pos1)
+            this._gotoPosition = this._pos2;
+        if(this.transform.position == this._pos2)
+            this._gotoPosition = this._pos1;
+        this.transform.position = Vector3.MoveTowards(this.transform.position,this._gotoPosition,this.moveSpeed);
     }
 }

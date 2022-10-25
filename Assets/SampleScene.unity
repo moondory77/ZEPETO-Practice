@@ -233,9 +233,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   script:
-    keys: []
-    unityValues: []
-    values: []
+    keys:
+    - TweenPosition1
+    - TweenPosition2
+    - moveSpeed
+    unityValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    values:
+    - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":0.0}"}'
+    - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":10.0}"}'
+    - '{"type":"System.Single, mscorlib","value":"0.1"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: a3ecaff2578ed415da5c3757ed2f18b7, type: 3}
@@ -255,10 +264,13 @@ MonoBehaviour:
   script:
     keys:
     - SyncSet
+    - multiplay
     unityValues:
+    - {fileID: 0}
     - {fileID: 0}
     values:
     - '{"type":"System.String, mscorlib","value":"0"}'
+    - 
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 5419c5d1d2ede4cde844dd059edfebce, type: 3}
@@ -486,9 +498,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   script:
-    keys: []
-    unityValues: []
-    values: []
+    keys:
+    - moveSpeed
+    - TweenPosition2
+    - TweenPosition1
+    unityValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    values:
+    - '{"type":"System.Single, mscorlib","value":"0.1"}'
+    - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":10.0}"}'
+    - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":0.0}"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: a3ecaff2578ed415da5c3757ed2f18b7, type: 3}
@@ -508,10 +529,13 @@ MonoBehaviour:
   script:
     keys:
     - SyncSet
+    - multiplay
     unityValues:
+    - {fileID: 0}
     - {fileID: 0}
     values:
     - '{"type":"System.String, mscorlib","value":"1"}'
+    - 
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 5419c5d1d2ede4cde844dd059edfebce, type: 3}
@@ -737,7 +761,7 @@ GameObject:
   - component: {fileID: 1414532581}
   - component: {fileID: 1414532583}
   m_Layer: 0
-  m_Name: World
+  m_Name: multiplaySample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -791,9 +815,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   script:
-    keys: []
-    unityValues: []
-    values: []
+    keys:
+    - multiplay
+    - room
+    unityValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    values:
+    - 
+    - 
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 4cddbe7a68cfd42589c26d49fd11a703, type: 3}
