@@ -6,10 +6,7 @@ export default class SampleScript extends ZepetoScriptBehaviour {
         console.log("Hello ZEPETO Scriptaaaa");
     }
 
-    Update() {
+    FixedUpdate() {
         this.transform.Rotate(3, 0, 0);
-    }
-    hi(){
-        
     }
 }

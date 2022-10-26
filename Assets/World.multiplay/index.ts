@@ -1,7 +1,9 @@
 import {Sandbox, SandboxOptions, SandboxPlayer} from "ZEPETO.Multiplay";
-import {Player} from "ZEPETO.Multiplay.Schema";
-
-
+import {Player, Vector3} from "ZEPETO.Multiplay.Schema";
+interface tf{
+    position:Vector3,
+    rotation:Vector3
+}
 export default class extends Sandbox {
     private sessionIdQueue: string[] = [];
     private masterClientSessionId: string;
@@ -26,16 +28,26 @@ export default class extends Sandbox {
             this.broadcast("Click", "echo to all : " + message);
         });
 
-        this.onMessage("boxPos", (client, message) => {
-            console.log(message);
-
-            this.broadcast("boxPos", "echo to sender : " + message);
+        this.onMessage("SyncTransform", (client, message:tf) => {
+            let boxPos:tf = {
+                position :message.position,
+                rotation : message.rotation
+            };
+            this.broadcast("SyncTransform", boxPos);
         });
+        
+        this.onMessage("CheckMaster", (client, message) => {
+            this.broadcast("CheckMaster", this.masterClientSessionId );
+            console.log("master->",this.masterClientSessionId )
+        });
+
     }
 
     onJoin(client: SandboxPlayer) {
         this.sessionIdQueue.push(client.sessionId.toString());
-        this.masterClientSessionId = this.sessionIdQueue[0];
+        if(this.masterClientSessionId != this.sessionIdQueue[0]) {
+            this.masterClientSessionId = this.sessionIdQueue[0];
+        }
         
         const player = new Player();
         player.sessionId = client.sessionId;
@@ -49,5 +61,7 @@ export default class extends Sandbox {
     onLeave(client: SandboxPlayer, consented?: boolean) {
         this.sessionIdQueue.splice((this.sessionIdQueue.indexOf(client.sessionId)),1)
         this.masterClientSessionId = this.sessionIdQueue[0];
+
+        this.broadcast("CheckMaster", this.masterClientSessionId );
     }
 }

@@ -244,7 +244,7 @@ MonoBehaviour:
     values:
     - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":0.0}"}'
     - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":10.0}"}'
-    - '{"type":"System.Single, mscorlib","value":"0.1"}'
+    - '{"type":"System.Single, mscorlib","value":"0.05"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: a3ecaff2578ed415da5c3757ed2f18b7, type: 3}
@@ -263,13 +263,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script:
     keys:
-    - SyncSet
+    - isMasterClient
     - multiplay
+    - SyncSet
     unityValues:
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
     values:
-    - '{"type":"System.String, mscorlib","value":"0"}'
+    - '{"type":"System.Boolean, mscorlib","value":"False"}'
+    - 
     - 
     unityArrayValues: []
     arrayValues: []
@@ -507,7 +510,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     values:
-    - '{"type":"System.Single, mscorlib","value":"0.1"}'
+    - '{"type":"System.Single, mscorlib","value":"0.05"}'
     - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":10.0}"}'
     - '{"type":"UnityEngine.Vector3, UnityEngine.CoreModule","value":"{\"x\":0.0,\"y\":0.0,\"z\":0.0}"}'
     unityArrayValues: []
@@ -530,12 +533,15 @@ MonoBehaviour:
     keys:
     - SyncSet
     - multiplay
+    - isMasterClient
     unityValues:
     - {fileID: 0}
+    - {fileID: 1414532581}
     - {fileID: 0}
     values:
     - '{"type":"System.String, mscorlib","value":"1"}'
     - 
+    - '{"type":"System.Boolean, mscorlib","value":"False"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 5419c5d1d2ede4cde844dd059edfebce, type: 3}
@@ -761,7 +767,7 @@ GameObject:
   - component: {fileID: 1414532581}
   - component: {fileID: 1414532583}
   m_Layer: 0
-  m_Name: multiplaySample
+  m_Name: multiplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -819,7 +825,7 @@ MonoBehaviour:
     - multiplay
     - room
     unityValues:
-    - {fileID: 0}
+    - {fileID: 1414532581}
     - {fileID: 0}
     values:
     - 

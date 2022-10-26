@@ -19,20 +19,17 @@ ScriptedImporter:
   WrapperFilters: []
   wrapperOutputDirectory: Generated
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
-    ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nclass
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nclass
     multiplaySample extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    /* Singleton
     */\r\n    static GetInstance() {\r\n        if (!multiplaySample.Instance) {\r\n           
-    const targetObj = UnityEngine_1.GameObject.Find(\"multiplaySample\");\r\n           
-    if (targetObj)\r\n                multiplaySample.Instance = targetObj.GetComponent($typeof(multiplaySample));\r\n       
-    }\r\n        return multiplaySample.Instance;\r\n    }\r\n    Start() {\r\n       
-    this.multiplay = this.gameObject.GetComponent($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
-    this.multiplay.add_RoomJoined((room) => {\r\n            this.room = room;\r\n           
-    console.log(`RoomCreated, my session id is ${room.SessionId}`);\r\n           
-    // send message to server\r\n            room.Send(\"echo\", \"hello ZEPETO Multiplay\");\r\n           
-    // add server message listener\r\n            room.AddMessageHandler(\"echo\",
-    (message) => {\r\n                // print server message\r\n               
-    console.log(message);\r\n            });\r\n        });\r\n    }\r\n}\r\nexports.default
-    = multiplaySample;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibXVsdGlwbGF5U2FtcGxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibXVsdGlwbGF5U2FtcGxlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsaURBQXNEO0FBQ3RELCtDQUFvRDtBQUVwRCw2Q0FBeUM7QUFFekMsTUFBcUIsZUFBZ0IsU0FBUSxxQ0FBcUI7SUFLaEUsZUFBZTtJQUNSLE1BQU0sQ0FBQyxXQUFXO1FBQ3ZCLElBQUksQ0FBQyxlQUFlLENBQUMsUUFBUSxFQUFFO1lBQzdCLE1BQU0sU0FBUyxHQUFHLHdCQUFVLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLENBQUM7WUFDckQsSUFBSSxTQUFTO2dCQUNYLGVBQWUsQ0FBQyxRQUFRLEdBQUcsU0FBUyxDQUFDLFlBQVksU0FBQyxlQUFlLEVBQUcsQ0FBQztTQUN4RTtRQUNELE9BQU8sZUFBZSxDQUFDLFFBQVEsQ0FBQztJQUNsQyxDQUFDO0lBQ0QsS0FBSztRQUNILElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDLFVBQVUsQ0FBQyxZQUFZLFNBQUMsbUNBQW9CLEVBQUcsQ0FBQztRQUN0RSxJQUFJLENBQUMsU0FBUyxnQkFBZSxDQUFDLElBQVUsRUFBRSxFQUFFO1lBQzFDLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDO1lBQ2pCLE9BQU8sQ0FBQyxHQUFHLENBQUMsaUNBQWlDLElBQUksQ0FBQyxTQUFTLEVBQUUsQ0FBQyxDQUFDO1lBRS9ELHlCQUF5QjtZQUN6QixJQUFJLENBQUMsSUFBSSxDQUFDLE1BQU0sRUFBRSx3QkFBd0IsQ0FBQyxDQUFDO1lBRTVDLDhCQUE4QjtZQUM5QixJQUFJLENBQUMsaUJBQWlCLENBQUMsTUFBTSxFQUFFLENBQUMsT0FBTyxFQUFFLEVBQUU7Z0JBQ3pDLHVCQUF1QjtnQkFDdkIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQztZQUN2QixDQUFDLENBQUMsQ0FBQztRQUNMLENBQUMsRUFBQztJQUNKLENBQUM7Q0FDRjtBQTlCRCxrQ0E4QkMifQ==","assetPath":"Assets/MyScript/multiplaySample.ts","manifest":{"properties":[{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"room","type":"ZEPETO.Multiplay.Room","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"multiplaySample","description":""},"isCompiled":true}'
-  typescriptHash: 3157fe79268d6447601d7fae9ac7d051
+    multiplaySample.Instance = this.Instance;\r\n        }\r\n        return multiplaySample.Instance;\r\n   
+    }\r\n    Start() {\r\n        //multiplaySample.GetInstance();\r\n        this.multiplay.add_RoomJoined((room)
+    => {\r\n            this.room = room;\r\n            console.log(`RoomCreated,
+    my session id is ${room.SessionId}`);\r\n            // send message to server\r\n           
+    room.Send(\"echo\", \"hello ZEPETO Multiplay\");\r\n            // add server
+    message listener\r\n            room.AddMessageHandler(\"echo\", (message) =>
+    {\r\n                // print server message\r\n                console.log(message);\r\n           
+    });\r\n        });\r\n    }\r\n}\r\nexports.default = multiplaySample;\r\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibXVsdGlwbGF5U2FtcGxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibXVsdGlwbGF5U2FtcGxlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsaURBQXNEO0FBS3RELE1BQXFCLGVBQWdCLFNBQVEscUNBQXFCO0lBS2hFLGVBQWU7SUFDUixNQUFNLENBQUMsV0FBVztRQUN2QixJQUFJLENBQUMsZUFBZSxDQUFDLFFBQVEsRUFBRTtZQUMzQixlQUFlLENBQUMsUUFBUSxHQUFHLElBQUksQ0FBQyxRQUFRLENBQUM7U0FDNUM7UUFDRCxPQUFPLGVBQWUsQ0FBQyxRQUFRLENBQUM7SUFDbEMsQ0FBQztJQUNELEtBQUs7UUFDSCxnQ0FBZ0M7UUFDaEMsSUFBSSxDQUFDLFNBQVMsZ0JBQWUsQ0FBQyxJQUFVLEVBQUUsRUFBRTtZQUMxQyxJQUFJLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQztZQUNqQixPQUFPLENBQUMsR0FBRyxDQUFDLGlDQUFpQyxJQUFJLENBQUMsU0FBUyxFQUFFLENBQUMsQ0FBQztZQUUvRCx5QkFBeUI7WUFDekIsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLEVBQUUsd0JBQXdCLENBQUMsQ0FBQztZQUU1Qyw4QkFBOEI7WUFDOUIsSUFBSSxDQUFDLGlCQUFpQixDQUFDLE1BQU0sRUFBRSxDQUFDLE9BQU8sRUFBRSxFQUFFO2dCQUN6Qyx1QkFBdUI7Z0JBQ3ZCLE9BQU8sQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUM7WUFDdkIsQ0FBQyxDQUFDLENBQUM7UUFDTCxDQUFDLEVBQUM7SUFDSixDQUFDO0NBRUY7QUE3QkQsa0NBNkJDIn0=","assetPath":"Assets/MyScript/multiplaySample.ts","manifest":{"properties":[{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"room","type":"ZEPETO.Multiplay.Room","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"multiplaySample","description":""},"isCompiled":true}'
+  typescriptHash: 85563cadb1fadbf4c3ba032bd1455860
   onlyWriteTrigger: 0

@@ -11,14 +11,12 @@ export default class multiplaySample extends ZepetoScriptBehaviour {
   /* Singleton */
   public static GetInstance(): multiplaySample {
     if (!multiplaySample.Instance) {
-      const targetObj = GameObject.Find("multiplaySample");
-      if (targetObj)
-        multiplaySample.Instance = targetObj.GetComponent<multiplaySample>();
+        multiplaySample.Instance = this.Instance;
     }
     return multiplaySample.Instance;
   }
   Start() {
-    this.multiplay = this.gameObject.GetComponent<ZepetoWorldMultiplay>();
+    //multiplaySample.GetInstance();
     this.multiplay.RoomJoined += (room: Room) => {
       this.room = room;
       console.log(`RoomCreated, my session id is ${room.SessionId}`);
@@ -33,4 +31,5 @@ export default class multiplaySample extends ZepetoScriptBehaviour {
       });
     };
   }
+  
 }
