@@ -1,6 +1,7 @@
 import {Sandbox, SandboxOptions, SandboxPlayer} from "ZEPETO.Multiplay";
 import {Player, Vector3} from "ZEPETO.Multiplay.Schema";
 interface tf{
+    Id:string,
     position:Vector3,
     rotation:Vector3,
     scale:Vector3
@@ -31,6 +32,7 @@ export default class extends Sandbox {
 
         this.onMessage("SyncTransform", (client, message:tf) => {
             let syncTransform:tf = {
+                Id :message.Id,
                 position :message.position,
                 rotation : message.rotation,
                 scale :message.scale

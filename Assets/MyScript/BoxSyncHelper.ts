@@ -9,6 +9,7 @@ export const enum UpdateAuthority {
   "Sync",
 }
 interface tf{
+  Id:string,
   position:Vector3,
   rotation:Vector3,
   scale:Vector3
@@ -18,6 +19,7 @@ export default class BoxSyncHelper extends ZepetoScriptBehaviour {
   @SerializeField() private SyncPosition: boolean = true;
   @SerializeField() private SyncRotation: boolean = true;
   @SerializeField() private SyncScale: boolean = true;
+  @SerializeField() private Id: string = "";
   
   private multiplay: ZepetoWorldMultiplay;
   private room: Room;
@@ -41,17 +43,20 @@ export default class BoxSyncHelper extends ZepetoScriptBehaviour {
             this.isMasterClient = true;
             console.log("ImMasterClient");
           }
+          
           if(this.isMasterClient)
             this.StartCoroutine(this.SyncPositionSend(0.04));
           else
             this.room.AddMessageHandler("SyncTransform", (message:tf) => {
-              // print server message
-              if(this.SyncPosition)
-                this.transform.position = this.ParseVector3(message.position);
-              if(this.SyncRotation)
-                this.transform.rotation = Quaternion.Euler(this.ParseVector3(message.rotation));              if(this.SyncRotation)
-              if(this.SyncScale)
-                this.transform.localScale = this.ParseVector3(message.scale);
+              if(this.Id == message.Id) {
+                if (this.SyncPosition)
+                  this.transform.position = this.ParseVector3(message.position);
+                if (this.SyncRotation)
+                  this.transform.rotation = Quaternion.Euler(this.ParseVector3(message.rotation));
+                if (this.SyncRotation)
+                  if (this.SyncScale)
+                    this.transform.localScale = this.ParseVector3(message.scale);
+              }
             });
         });
       };
@@ -69,7 +74,8 @@ export default class BoxSyncHelper extends ZepetoScriptBehaviour {
 
   private SendTransform(transform: Transform) {
     const data = new RoomData();
-
+    data.Add("Id",this.Id);
+    
     const pos = new RoomData();
     pos.Add("x", transform.localPosition.x);
     pos.Add("y", transform.localPosition.y);
