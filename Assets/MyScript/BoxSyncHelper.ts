@@ -10,17 +10,22 @@ export const enum UpdateAuthority {
 }
 interface tf{
   position:Vector3,
-  rotation:Vector3
+  rotation:Vector3,
+  scale:Vector3
 }
 export default class BoxSyncHelper extends ZepetoScriptBehaviour {
-  public SyncSet: UpdateAuthority = UpdateAuthority.NoneSync;
-  public multiplay: ZepetoWorldMultiplay;
-  private room: Room;
+  @SerializeField() private SyncSet: UpdateAuthority = UpdateAuthority.Sync;
+  @SerializeField() private SyncPosition: boolean = true;
+  @SerializeField() private SyncRotation: boolean = true;
+  @SerializeField() private SyncScale: boolean = true;
   
+  private multiplay: ZepetoWorldMultiplay;
+  private room: Room;
   private isMasterClient:boolean = false;
   
   Start() {
     //동기화 하지 않음
+    this.multiplay = multiplaySample.instance.multiplay;
     if (this.SyncSet == UpdateAuthority.NoneSync) {
       console.log(this.name);
     }
@@ -41,8 +46,12 @@ export default class BoxSyncHelper extends ZepetoScriptBehaviour {
           else
             this.room.AddMessageHandler("SyncTransform", (message:tf) => {
               // print server message
-              this.transform.position = this.ParseVector3(message.position);
-              this.transform.rotation = Quaternion.Euler(this.ParseVector3(message.rotation));
+              if(this.SyncPosition)
+                this.transform.position = this.ParseVector3(message.position);
+              if(this.SyncRotation)
+                this.transform.rotation = Quaternion.Euler(this.ParseVector3(message.rotation));              if(this.SyncRotation)
+              if(this.SyncScale)
+                this.transform.localScale = this.ParseVector3(message.scale);
             });
         });
       };
@@ -72,6 +81,12 @@ export default class BoxSyncHelper extends ZepetoScriptBehaviour {
     rot.Add("y", transform.localEulerAngles.y);
     rot.Add("z", transform.localEulerAngles.z);
     data.Add("rotation", rot.GetObject());
+
+    const scale = new RoomData();
+    scale.Add("x", transform.localScale.x);
+    scale.Add("y", transform.localScale.y);
+    scale.Add("z", transform.localScale.z);
+    data.Add("scale", scale.GetObject());
     this.room.Send("SyncTransform", data.GetObject());
   }
 

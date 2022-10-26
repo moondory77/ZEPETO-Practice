@@ -7,16 +7,18 @@ export default class multiplaySample extends ZepetoScriptBehaviour {
   public multiplay: ZepetoWorldMultiplay;
   public room: Room;
 
-  private static Instance: multiplaySample;
+  public static instance: multiplaySample;
   /* Singleton */
-  public static GetInstance(): multiplaySample {
-    if (!multiplaySample.Instance) {
-        multiplaySample.Instance = this.Instance;
+  Awake(){
+    if (multiplaySample.instance == null) {
+      multiplaySample.instance = this;
     }
-    return multiplaySample.Instance;
+    else{
+      return;
+    }
   }
+  
   Start() {
-    //multiplaySample.GetInstance();
     this.multiplay.RoomJoined += (room: Room) => {
       this.room = room;
       console.log(`RoomCreated, my session id is ${room.SessionId}`);

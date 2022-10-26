@@ -13,6 +13,7 @@ export default class BoxMover extends ZepetoScriptBehaviour {
     
     Start() {
         this._gotoPosition = this.TweenPosition2;
+        
         this._pos1 = this.transform.position + this.TweenPosition1;
         this._pos2 = this.transform.position + this.TweenPosition2;
     }

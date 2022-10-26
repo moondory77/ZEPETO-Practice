@@ -263,17 +263,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script:
     keys:
-    - isMasterClient
-    - multiplay
     - SyncSet
+    - SyncPosition
+    - SyncRotation
+    - SyncScale
     unityValues:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
     values:
-    - '{"type":"System.Boolean, mscorlib","value":"False"}'
-    - 
-    - 
+    - '{"type":"System.String, mscorlib","value":"0"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 5419c5d1d2ede4cde844dd059edfebce, type: 3}
@@ -532,16 +535,19 @@ MonoBehaviour:
   script:
     keys:
     - SyncSet
-    - multiplay
-    - isMasterClient
+    - SyncPosition
+    - SyncRotation
+    - SyncScale
     unityValues:
     - {fileID: 0}
-    - {fileID: 1414532581}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
     values:
     - '{"type":"System.String, mscorlib","value":"1"}'
-    - 
-    - '{"type":"System.Boolean, mscorlib","value":"False"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 5419c5d1d2ede4cde844dd059edfebce, type: 3}
