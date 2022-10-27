@@ -1,0 +1,70 @@
+fileFormatVersion: 2
+guid: 5419c5d1d2ede4cde844dd059edfebce
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: "{\"source\":\"\\\"use strict\\\";\\r\\nObject.defineProperty(exports,
+    \\\"__esModule\\\", { value: true });\\r\\nconst UnityEngine_1 = require(\\\"UnityEngine\\\");\\r\\nconst
+    ZEPETO_Script_1 = require(\\\"ZEPETO.Script\\\");\\r\\nconst multiplaySample_1
+    = require(\\\"./multiplaySample\\\");\\r\\nconst ZEPETO_Multiplay_1 = require(\\\"ZEPETO.Multiplay\\\");\\r\\nclass
+    TransformSyncHelper extends ZEPETO_Script_1.ZepetoScriptBehaviour {\\r\\n   
+    constructor() {\\r\\n        super(...arguments);\\r\\n        this.isMasterClient
+    = false;\\r\\n        this.isSync = false;\\r\\n        this.Id = \\\"\\\";\\r\\n       
+    this.SyncPosition = true;\\r\\n        this.SyncRotation = true;\\r\\n       
+    this.SyncScale = true;\\r\\n    }\\r\\n    Start() {\\r\\n        //\uD558\uB098\uB77C\uB3C4
+    \uB3D9\uAE30\uD654 \uD558\uBA74\\r\\n        if (this.SyncPosition || this.SyncRotation
+    || this.SyncScale) {\\r\\n            this.isSync = true;\\r\\n        }\\r\\n       
+    if (this.isSync) {\\r\\n            if (this.Id == \\\"\\\") {\\r\\n               
+    throw 'Error: You must put ID in Sync Helper.';\\r\\n            }\\r\\n           
+    this.multiplay = multiplaySample_1.default.instance.multiplay;\\r\\n           
+    this.SyncTransform();\\r\\n        }\\r\\n        //\uB3D9\uAE30\uD654 \uD558\uC9C0
+    \uC54A\uC74C\\r\\n        else\\r\\n            return;\\r\\n    }\\r\\n    SyncTransform()
+    {\\r\\n        const syncId = \\\"SyncTransform\\\" + this.Id;\\r\\n        this.multiplay.add_RoomJoined((room)
+    => {\\r\\n            this.room = room;\\r\\n            this.room.Send(\\\"CheckMaster\\\");\\r\\n           
+    this.room.AddMessageHandler(\\\"CheckMaster\\\", (message) => {\\r\\n               
+    if (this.room.SessionId == message) {\\r\\n                    this.isMasterClient
+    = true;\\r\\n                    console.log(\\\"ImMasterClient\\\");\\r\\n               
+    }\\r\\n                if (this.isMasterClient)\\r\\n                    this.StartCoroutine(this.SyncPositionSend(0.4));\\r\\n               
+    else\\r\\n                    this.room.AddMessageHandler(syncId, (message) =>
+    {\\r\\n                        if (this.SyncPosition)\\r\\n                           
+    this.transform.position = this.ParseVector3(message.position);\\r\\n                       
+    if (this.SyncRotation)\\r\\n                            this.transform.rotation
+    = UnityEngine_1.Quaternion.Euler(this.ParseVector3(message.rotation));\\r\\n                       
+    if (this.SyncScale)\\r\\n                            this.transform.localScale
+    = this.ParseVector3(message.scale);\\r\\n                    });\\r\\n           
+    });\\r\\n        });\\r\\n    }\\r\\n    //\uC77C\uC815 \uC2DC\uAC04\uB9C8\uB2E4
+    \uC11C\uBC84\uB85C \uD604\uC7AC \uC704\uCE58\uB97C \uBCF4\uB0C4\\r\\n    *SyncPositionSend(tick)
+    {\\r\\n        while (true) {\\r\\n            yield new UnityEngine_1.WaitForSeconds(tick);\\r\\n           
+    let boxPos = this.transform.position;\\r\\n            this.SendTransform(this.transform);\\r\\n       
+    }\\r\\n    }\\r\\n    SendTransform(transform) {\\r\\n        const data = new
+    ZEPETO_Multiplay_1.RoomData();\\r\\n        data.Add(\\\"Id\\\", this.Id);\\r\\n       
+    const pos = new ZEPETO_Multiplay_1.RoomData();\\r\\n        pos.Add(\\\"x\\\",
+    transform.localPosition.x);\\r\\n        pos.Add(\\\"y\\\", transform.localPosition.y);\\r\\n       
+    pos.Add(\\\"z\\\", transform.localPosition.z);\\r\\n        data.Add(\\\"position\\\",
+    pos.GetObject());\\r\\n        const rot = new ZEPETO_Multiplay_1.RoomData();\\r\\n       
+    rot.Add(\\\"x\\\", transform.localEulerAngles.x);\\r\\n        rot.Add(\\\"y\\\",
+    transform.localEulerAngles.y);\\r\\n        rot.Add(\\\"z\\\", transform.localEulerAngles.z);\\r\\n       
+    data.Add(\\\"rotation\\\", rot.GetObject());\\r\\n        const scale = new ZEPETO_Multiplay_1.RoomData();\\r\\n       
+    scale.Add(\\\"x\\\", transform.localScale.x);\\r\\n        scale.Add(\\\"y\\\",
+    transform.localScale.y);\\r\\n        scale.Add(\\\"z\\\", transform.localScale.z);\\r\\n       
+    data.Add(\\\"scale\\\", scale.GetObject());\\r\\n        this.room.Send(\\\"SyncTransform\\\",
+    data.GetObject());\\r\\n    }\\r\\n    ParseVector3(vector3) {\\r\\n        return
+    new UnityEngine_1.Vector3(vector3.x, vector3.y, vector3.z);\\r\\n    }\\r\\n}\\r\\nexports.default
+    = TransformSyncHelper;\\r\\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVHJhbnNmb3JtU3luY0hlbHBlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlRyYW5zZm9ybVN5bmNIZWxwZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBMkU7QUFDM0UsaURBQW9EO0FBQ3BELHVEQUFnRDtBQUNoRCx1REFBZ0Q7QUFVaEQsTUFBcUIsbUJBQW9CLFNBQVEscUNBQXFCO0lBQXRFOztRQUM4QixtQkFBYyxHQUFZLEtBQUssQ0FBQztRQUNoQyxXQUFNLEdBQVksS0FBSyxDQUFDO1FBRXhCLE9BQUUsR0FBVyxFQUFFLENBQUM7UUFDaEIsaUJBQVksR0FBWSxJQUFJLENBQUM7UUFDN0IsaUJBQVksR0FBWSxJQUFJLENBQUM7UUFDN0IsY0FBUyxHQUFZLElBQUksQ0FBQztJQXFGeEQsQ0FBQztJQWhGRyxLQUFLO1FBQ0QsYUFBYTtRQUNiLElBQUksSUFBSSxDQUFDLFlBQVksSUFBSSxJQUFJLENBQUMsWUFBWSxJQUFJLElBQUksQ0FBQyxTQUFTLEVBQUU7WUFDMUQsSUFBSSxDQUFDLE1BQU0sR0FBRyxJQUFJLENBQUM7U0FDdEI7UUFFRCxJQUFJLElBQUksQ0FBQyxNQUFNLEVBQUU7WUFDYixJQUFJLElBQUksQ0FBQyxFQUFFLElBQUksRUFBRSxFQUFFO2dCQUNmLE1BQU0sd0NBQXdDLENBQUM7YUFDbEQ7WUFDRCxJQUFJLENBQUMsU0FBUyxHQUFHLHlCQUFlLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQztZQUNwRCxJQUFJLENBQUMsYUFBYSxFQUFFLENBQUM7U0FDeEI7UUFDRCxXQUFXOztZQUVQLE9BQU87SUFDZixDQUFDO0lBRUQsYUFBYTtRQUNULE1BQU0sTUFBTSxHQUFVLGVBQWUsR0FBRyxJQUFJLENBQUMsRUFBRSxDQUFDO1FBQ2hELElBQUksQ0FBQyxTQUFTLGdCQUFlLENBQUMsSUFBVSxFQUFFLEVBQUU7WUFDeEMsSUFBSSxDQUFDLElBQUksR0FBRyxJQUFJLENBQUM7WUFDakIsSUFBSSxDQUFDLElB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\",\"assetPath\":\"Assets/MyScript/TransformSyncHelper.ts\",\"manifest\":{\"properties\":[{\"assembly\":\"mscorlib\",\"name\":\"isMasterClient\",\"type\":\"System.Boolean\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[{\"name\":\"HideInInspector\",\"args\":[]}]},{\"assembly\":\"mscorlib\",\"name\":\"isSync\",\"type\":\"System.Boolean\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[{\"name\":\"HideInInspector\",\"args\":[]}]},{\"assembly\":\"mscorlib\",\"name\":\"Id\",\"type\":\"System.String\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[{\"name\":\"SerializeField\",\"args\":[]}]},{\"assembly\":\"mscorlib\",\"name\":\"SyncPosition\",\"type\":\"System.Boolean\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[{\"name\":\"SerializeField\",\"args\":[]}]},{\"assembly\":\"mscorlib\",\"name\":\"SyncRotation\",\"type\":\"System.Boolean\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[{\"name\":\"SerializeField\",\"args\":[]}]},{\"assembly\":\"mscorlib\",\"name\":\"SyncScale\",\"type\":\"System.Boolean\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[{\"name\":\"SerializeField\",\"args\":[]}]}],\"name\":\"TransformSyncHelper\",\"description\":\"\"},\"isCompiled\":true}"
+  typescriptHash: d509ab9fa337f4e5bd3b5b90c0631c43
+  onlyWriteTrigger: 0

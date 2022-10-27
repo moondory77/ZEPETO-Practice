@@ -37,7 +37,7 @@ export default class extends Sandbox {
                 rotation : message.rotation,
                 scale :message.scale
             };
-            this.broadcast("SyncTransform", syncTransform);
+            this.broadcast("SyncTransform"+message.Id, syncTransform);
         });
         
         this.onMessage("CheckMaster", (client, message) => {
