@@ -22,10 +22,12 @@ export default class BoxMover extends ZepetoScriptBehaviour {
         this._pos2 = this.transform.position + this.TweenPosition2;
     }
     FixedUpdate() {
+        if(this.transformSyncHelper.isMasterClient || !this.transformSyncHelper.isSync) {
             if (this.transform.position == this._pos1)
                 this._gotoPosition = this._pos2;
             if (this.transform.position == this._pos2)
                 this._gotoPosition = this._pos1;
             this.transform.position = Vector3.MoveTowards(this.transform.position, this._gotoPosition, this.moveSpeed);
+        }
     }
 }
