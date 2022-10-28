@@ -6,6 +6,13 @@ interface tf{
     rotation:Vector3,
     scale:Vector3
 }
+
+interface inforTween{
+    Id: string,
+    position: Vector3,
+    nextIndex : number
+}
+
 export default class extends Sandbox {
     private sessionIdQueue: string[] = [];
     private masterClientSessionId: string;
@@ -39,7 +46,15 @@ export default class extends Sandbox {
             };
             this.broadcast("SyncTransform"+message.Id, syncTransform);
         });
-        
+
+        this.onMessage("SyncTween", (client, message:inforTween) => {
+            let syncTween:inforTween = {
+                Id :message.Id,
+                position :message.position,
+                nextIndex : message.nextIndex,
+            };
+            this.broadcast("SyncTween"+message.Id, syncTween);
+        });
         this.onMessage("CheckMaster", (client, message) => {
             if(this.masterClientSessionId != this.sessionIdQueue[0]) {
                 this.masterClientSessionId = this.sessionIdQueue[0];
