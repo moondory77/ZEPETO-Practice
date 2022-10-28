@@ -359,7 +359,7 @@ MonoBehaviour:
       UnityEngine.CoreModule\",\"isUnity\":false}"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"System.String, mscorlib","value":"dasdvvv"}'
+    - '{"type":"System.String, mscorlib","value":"Tween1"}'
     unityArrayValues: []
     arrayValues:
     - '{"x":5.0,"y":0.0,"z":0.0}'

@@ -43,6 +43,7 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
     private nextIndex: number = 1;
 
     private straightDir :boolean =  true;
+    private isEndPoint : boolean = false;
 
     Awake() {
         this._startPosition = this.transform.position;
@@ -84,8 +85,17 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
                     }
                     this.nextIndex = this.straightDir ? this.nextIndex + 1 : this.nextIndex - 1;
                     break;
+                case LoopType.NotLoop:
+                    if(this.nextIndex == this.TweenPosition.length - 1){
+                        this.isEndPoint =true;
+                    }
+                    else{
+                        this.nextIndex++;
+                        this.isEndPoint =false;
+                    }
+                    break;
             }
-            if(this.isMasterClient){
+            if(this.isMasterClient && !this.isEndPoint){
                 this.SendPoint()
             }
         }
