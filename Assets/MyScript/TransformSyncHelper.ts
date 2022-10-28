@@ -52,6 +52,7 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
             
             this.room.AddMessageHandler("CheckMaster", (MasterClientSessionId) => {
                 if (this.room.SessionId == MasterClientSessionId) {
+                    //처음 마스터가 되면
                     if(!this.isMasterClient) {
                         this.isMasterClient = true;
                         this.StartCoroutine(this.SyncPositionSend(0.04));
