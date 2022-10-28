@@ -1,22 +1,73 @@
-import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
-import {WaitForSeconds} from "UnityEngine";
+import {ZepetoScriptBehaviour} from 'ZEPETO.Script'
+import {WaitForSeconds, Random, Vector3} from "UnityEngine";
 import TransformSyncHelper from './TransformSyncHelper';
 
 export default class randomTransformChanger extends ZepetoScriptBehaviour {
 
-    @SerializeField() private transformSyncHelper:TransformSyncHelper;
-    
+    @SerializeField() private transformSyncHelper: TransformSyncHelper;
+
     Start() {
         this.transformSyncHelper = this.GetComponent<TransformSyncHelper>();
         this.StartCoroutine(this.RandomAnyThings());
     }
-    *RandomAnyThings(){
-        //트랜스폼 변경하는거 암거나 싹다 랜덤
-        //ex) rotate 30도
-        //ex) pos 옆으로 3만큼
-        //ex) x사이즈 1.2배
-        
-        // 시간도 0~2초사이 아무때나
-        yield new WaitForSeconds(1);
+
+    GetRandomInt(max: number) {
+        return Math.floor(Math.random() * max);
+    }
+
+    * RandomAnyThings() {
+        while (true) {
+            if (this.transformSyncHelper.isMasterClient) {
+                const randType: number = this.GetRandomInt(2);
+                const randNum: int = this.GetRandomInt(6);
+                switch (randType) {
+                    case 0:
+                        switch (randNum) {
+                            case 0:
+                                this.transform.position += Vector3.forward;
+                                break;
+                            case 1:
+                                this.transform.position += Vector3.up;
+                                break;
+                            case 2:
+                                this.transform.position += Vector3.right;
+                                break;
+                            case 3:
+                                this.transform.position -= Vector3.forward;
+                                break;
+                            case 4:
+                                this.transform.position -= Vector3.up;
+                                break;
+                            case 5:
+                                this.transform.position -= Vector3.right;
+                                break;
+                        }
+                        break;
+                    case 1:
+                        switch (randNum) {
+                            case 0:
+                                this.transform.localScale += Vector3.forward * 0.2;
+                                break;
+                            case 1:
+                                this.transform.localScale += Vector3.up * 0.2;
+                                break;
+                            case 2:
+                                this.transform.localScale += Vector3.right * 0.2;
+                                break;
+                            case 3:
+                                this.transform.localScale -= Vector3.forward * 0.2;
+                                break;
+                            case 4:
+                                this.transform.localScale -= Vector3.up * 0.2;
+                                break;
+                            case 5:
+                                this.transform.localScale -= Vector3.right * 0.2;
+                                break;
+                        }
+                        break;
+                }
+            }
+            yield new WaitForSeconds(1);
+        }
     }
 }

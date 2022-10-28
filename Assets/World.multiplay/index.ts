@@ -41,8 +41,11 @@ export default class extends Sandbox {
         });
         
         this.onMessage("CheckMaster", (client, message) => {
-            this.broadcast("CheckMaster", this.masterClientSessionId );
-            console.log("master->",this.masterClientSessionId )
+            if(this.masterClientSessionId != this.sessionIdQueue[0]) {
+                this.masterClientSessionId = this.sessionIdQueue[0];
+                console.log("master->", this.masterClientSessionId)
+            }
+            this.broadcast("CheckMaster", this.masterClientSessionId);
         });
 
     }
@@ -51,21 +54,23 @@ export default class extends Sandbox {
         this.sessionIdQueue.push(client.sessionId.toString());
         if(this.masterClientSessionId != this.sessionIdQueue[0]) {
             this.masterClientSessionId = this.sessionIdQueue[0];
+            console.log("master->", this.masterClientSessionId)
         }
+        console.log("join");
         
         const player = new Player();
         player.sessionId = client.sessionId;
         var players = this.state.players;
 
         players.set(client.sessionId, player);
-
-        console.log('onJoin!!!!');
     }
 
     onLeave(client: SandboxPlayer, consented?: boolean) {
         this.sessionIdQueue.splice((this.sessionIdQueue.indexOf(client.sessionId)),1)
-        this.masterClientSessionId = this.sessionIdQueue[0];
-
-        this.broadcast("CheckMaster", this.masterClientSessionId );
+        if(this.masterClientSessionId != this.sessionIdQueue[0]) {
+            this.masterClientSessionId = this.sessionIdQueue[0];
+            this.broadcast("CheckMaster", this.masterClientSessionId);
+            console.log("master->", this.masterClientSessionId)
+        }
     }
 }

@@ -37,22 +37,28 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
             this.multiplay = multiplaySample.instance.multiplay;
             this.SyncTransform();
         }
+        else{
+            this.isMasterClient = true;
+        }
     }
 
     SyncTransform() {
         const syncId: string = "SyncTransform" + this.Id;
 
         this.multiplay.RoomJoined += (room: Room) => {
+
             this.room = room;
             this.room.Send("CheckMaster")
-            this.room.AddMessageHandler("CheckMaster", (message) => {
-                if (this.room.SessionId == message) {
-                    this.isMasterClient = true;
+            
+            this.room.AddMessageHandler("CheckMaster", (MasterClientSessionId) => {
+                if (this.room.SessionId == MasterClientSessionId) {
+                    if(!this.isMasterClient) {
+                        this.isMasterClient = true;
+                        this.StartCoroutine(this.SyncPositionSend(0.04));
+                    }
+                    this.SendTransform(this.transform);
                     console.log("ImMasterClient");
                 }
-
-                if (this.isMasterClient)
-                    this.StartCoroutine(this.SyncPositionSend(0.04));
                 else
                     this.room.AddMessageHandler(syncId, (message: tf) => {
                         if (this.SyncPosition) {
@@ -81,6 +87,7 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
         let pastRot: Vector3 = this.transform.rotation.eulerAngles;
         let pastScale: Vector3 = this.transform.localScale;
         let syncNowFrame : boolean = false;
+
         
         while (true) {
             if (this.SyncPosition) {

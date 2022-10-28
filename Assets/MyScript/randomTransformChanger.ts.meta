@@ -20,9 +20,48 @@ ScriptedImporter:
   wrapperOutputDirectory: Generated
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
     { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
-    UnityEngine_1 = require(\"UnityEngine\");\r\nclass randomTransformChanger extends
-    ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start() {\r\n        this.StartCoroutine(this.RandomAnyThings());\r\n   
-    }\r\n    *RandomAnyThings() {\r\n        yield new UnityEngine_1.WaitForSeconds(1);\r\n   
-    }\r\n}\r\nexports.default = randomTransformChanger;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmFuZG9tVHJhbnNmb3JtQ2hhbmdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInJhbmRvbVRyYW5zZm9ybUNoYW5nZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFDckQsNkNBQTJDO0FBRTNDLE1BQXFCLHNCQUF1QixTQUFRLHFDQUFxQjtJQUVyRSxLQUFLO1FBQ0QsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsZUFBZSxFQUFFLENBQUMsQ0FBQztJQUNoRCxDQUFDO0lBQ0QsQ0FBQyxlQUFlO1FBRVosTUFBTSxJQUFJLDRCQUFjLENBQUMsQ0FBQyxDQUFDLENBQUM7SUFDaEMsQ0FBQztDQUNKO0FBVEQseUNBU0MifQ==","assetPath":"Assets/MyScript/randomTransformChanger.ts","manifest":{"properties":[],"name":"randomTransformChanger","description":""},"isCompiled":true}'
-  typescriptHash: d3e9783fed3db6a8d3a6f9c9dc311eb8
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst TransformSyncHelper_1 = require(\"./TransformSyncHelper\");\r\nclass
+    randomTransformChanger extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n   
+    Start() {\r\n        this.transformSyncHelper = this.GetComponent($typeof(TransformSyncHelper_1.default));\r\n       
+    this.StartCoroutine(this.RandomAnyThings());\r\n    }\r\n    GetRandomInt(max)
+    {\r\n        return Math.floor(Math.random() * max);\r\n    }\r\n    *RandomAnyThings()
+    {\r\n        while (true) {\r\n            if (this.transformSyncHelper.isMasterClient)
+    {\r\n                const randType = this.GetRandomInt(2);\r\n               
+    const randNum = this.GetRandomInt(6);\r\n                switch (randType) {\r\n                   
+    case 0:\r\n                        switch (randNum) {\r\n                           
+    case 0:\r\n                                this.transform.position = UnityEngine_1.Vector3.op_Addition(this.transform.position,
+    UnityEngine_1.Vector3.forward);\r\n                                break;\r\n                           
+    case 1:\r\n                                this.transform.position = UnityEngine_1.Vector3.op_Addition(this.transform.position,
+    UnityEngine_1.Vector3.up);\r\n                                break;\r\n                           
+    case 2:\r\n                                this.transform.position = UnityEngine_1.Vector3.op_Addition(this.transform.position,
+    UnityEngine_1.Vector3.right);\r\n                                break;\r\n                           
+    case 3:\r\n                                this.transform.position = UnityEngine_1.Vector3.op_Subtraction(this.transform.position,
+    UnityEngine_1.Vector3.forward);\r\n                                break;\r\n                           
+    case 4:\r\n                                this.transform.position = UnityEngine_1.Vector3.op_Subtraction(this.transform.position,
+    UnityEngine_1.Vector3.up);\r\n                                break;\r\n                           
+    case 5:\r\n                                this.transform.position = UnityEngine_1.Vector3.op_Subtraction(this.transform.position,
+    UnityEngine_1.Vector3.right);\r\n                                break;\r\n                       
+    }\r\n                        break;\r\n                    case 1:\r\n                       
+    switch (randNum) {\r\n                            case 0:\r\n                               
+    this.transform.localScale = UnityEngine_1.Vector3.op_Addition(this.transform.localScale,
+    UnityEngine_1.Vector3.op_Multiply(UnityEngine_1.Vector3.forward, 0.2));\r\n                               
+    break;\r\n                            case 1:\r\n                               
+    this.transform.localScale = UnityEngine_1.Vector3.op_Addition(this.transform.localScale,
+    UnityEngine_1.Vector3.op_Multiply(UnityEngine_1.Vector3.up, 0.2));\r\n                               
+    break;\r\n                            case 2:\r\n                               
+    this.transform.localScale = UnityEngine_1.Vector3.op_Addition(this.transform.localScale,
+    UnityEngine_1.Vector3.op_Multiply(UnityEngine_1.Vector3.right, 0.2));\r\n                               
+    break;\r\n                            case 3:\r\n                               
+    this.transform.localScale = UnityEngine_1.Vector3.op_Subtraction(this.transform.localScale,
+    UnityEngine_1.Vector3.op_Multiply(UnityEngine_1.Vector3.forward, 0.2));\r\n                               
+    break;\r\n                            case 4:\r\n                               
+    this.transform.localScale = UnityEngine_1.Vector3.op_Subtraction(this.transform.localScale,
+    UnityEngine_1.Vector3.op_Multiply(UnityEngine_1.Vector3.up, 0.2));\r\n                               
+    break;\r\n                            case 5:\r\n                               
+    this.transform.localScale = UnityEngine_1.Vector3.op_Subtraction(this.transform.localScale,
+    UnityEngine_1.Vector3.op_Multiply(UnityEngine_1.Vector3.right, 0.2));\r\n                               
+    break;\r\n                        }\r\n                        break;\r\n               
+    }\r\n            }\r\n            yield new UnityEngine_1.WaitForSeconds(1);\r\n       
+    }\r\n    }\r\n}\r\nexports.default = randomTransformChanger;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmFuZG9tVHJhbnNmb3JtQ2hhbmdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInJhbmRvbVRyYW5zZm9ybUNoYW5nZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBbUQ7QUFDbkQsNkNBQTREO0FBQzVELCtEQUF3RDtBQUV4RCxNQUFxQixzQkFBdUIsU0FBUSxxQ0FBcUI7SUFJckUsS0FBSztRQUNELElBQUksQ0FBQyxtQkFBbUIsR0FBRyxJQUFJLENBQUMsWUFBWSxTQUFDLDZCQUFtQixFQUFHLENBQUM7UUFDcEUsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsZUFBZSxFQUFFLENBQUMsQ0FBQztJQUNoRCxDQUFDO0lBRUQsWUFBWSxDQUFDLEdBQVc7UUFDcEIsT0FBTyxJQUFJLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxNQUFNLEVBQUUsR0FBRyxHQUFHLENBQUMsQ0FBQztJQUMzQyxDQUFDO0lBRUQsQ0FBRSxlQUFlO1FBQ2IsT0FBTyxJQUFJLEVBQUU7WUFDVCxJQUFJLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxjQUFjLEVBQUU7Z0JBQ3pDLE1BQU0sUUFBUSxHQUFXLElBQUksQ0FBQyxZQUFZLENBQUMsQ0FBQyxDQUFDLENBQUM7Z0JBQzlDLE1BQU0sT0FBTyxHQUFRLElBQUksQ0FBQyxZQUFZLENBQUMsQ0FBQyxDQUFDLENBQUM7Z0JBQzFDLFFBQVEsUUFBUSxFQUFFO29CQUNkLEtBQUssQ0FBQzt3QkFDRixRQUFRLE9BQU8sRUFBRTs0QkFDYixLQUFLLENBQUM7Z0NBQ0YsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBekJ2QixxQkFBTyxDQXVFeXdsQixXQUFZLENBOUM1eGxCLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxFQUFJLHFCQUFPLENBQUMsT0FBTyxFQUFDO2dDQUMzQyxNQUFNOzRCQUNWLEtBQUssQ0FBQztnQ0FDRixJQUFJLENBQUMsU0FBUyxDQUFDLFFBQVEsR0E1QnZCLHFCQUFPLENB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","assetPath":"Assets/MyScript/randomTransformChanger.ts","manifest":{"properties":[{"assembly":"","name":"transformSyncHelper","type":"/Users/user/Desktop/UnityProjects/Practice/Assets/MyScript/TransformSyncHelper.default","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"randomTransformChanger","description":""},"isCompiled":true}'
+  typescriptHash: 194f8914f120fb82da2db6531688b44d
   onlyWriteTrigger: 0
