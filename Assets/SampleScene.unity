@@ -347,7 +347,9 @@ MonoBehaviour:
     - loopType
     - syncType
     - Id
+    - tweenType
     unityValues:
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
@@ -360,6 +362,7 @@ MonoBehaviour:
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"Tween1"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
     unityArrayValues: []
     arrayValues:
     - '{"x":5.0,"y":0.0,"z":0.0}'
@@ -1006,7 +1009,9 @@ MonoBehaviour:
     - loopType
     - syncType
     - Id
+    - tweenType
     unityValues:
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
@@ -1016,9 +1021,10 @@ MonoBehaviour:
     - '{"type":"System.Single, mscorlib","value":"1"}'
     - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":4,\"type\":\"UnityEngine.Vector3,
       UnityEngine.CoreModule\",\"isUnity\":false}"}'
-    - '{"type":"System.String, mscorlib","value":"1"}'
+    - '{"type":"System.String, mscorlib","value":"2"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"dasdvvv22"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
     unityArrayValues: []
     arrayValues:
     - '{"x":-5.0,"y":0.0,"z":0.0}'

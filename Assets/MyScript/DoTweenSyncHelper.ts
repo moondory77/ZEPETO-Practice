@@ -11,13 +11,20 @@ export enum SyncType {
     NoneSync = 1
 }
 
-export enum LoopType {
+export enum TweenType {
     //원형 빙빙 1 2 3 4 1 2 3 4
-    circle = 0,
+    Circulation = 0,
     //온길 되돌아가기 1 2 3 4 3 2 1
-    straight,
-    //루프안함 1 2 3 4 Stop
-    NotLoop
+    Linear,
+    //4도착시 1로 텔레포트 1 2 3 4 1(순간이동)
+    TeleportFirstPoint
+}
+
+export enum LoopType {
+    Repeat =0,
+    
+    JustOneWay,
+    JustOneRoundTrip
 }
 
 interface inforTween{
@@ -28,32 +35,44 @@ interface inforTween{
 export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
     @HideInInspector() public isMasterClient: boolean = false;
 
-
+    @SerializeField() private Id: string = "";
     @SerializeField() private syncType: SyncType = SyncType.Sync;
-    @SerializeField() private loopType: LoopType = LoopType.circle;
+    @SerializeField() private tweenType: TweenType = TweenType.Circulation;
+    @SerializeField() private loopType: LoopType = LoopType.Repeat;
     @SerializeField() private TweenPosition: Vector3[];
     @SerializeField() private moveSpeed: number = 1;
-    @SerializeField() private Id: string = "";
 
     private multiplay: ZepetoWorldMultiplay;
     private room: Room;
 
-    private _startPosition: Vector3;
-    private nowIndex: number = 0;
-    private nextIndex: number = 1;
+    private nowIndex: number;
+    private nextIndex: number;
 
     private straightDir :boolean =  true;
-    private isEndPoint : boolean = false;
+    
+    private loopCount:number;
+    private isEnd : boolean;
 
     Awake() {
-        this._startPosition = this.transform.position;
+
+        if (this.syncType == SyncType.Sync) {
+            if (this.Id == "") {
+                throw 'Error: You must put ID in Sync Helper.';
+                return;
+            }
+        }
+        if(this.TweenPosition.length<2){
+            throw 'Error: Enter at least two positions in the Twin Position.';
+            return;
+        }
+        this.nowIndex = 0;
+        this.nextIndex =1;
+        this.loopCount =0;
+        this.isEnd = false;
     }
 
     Start() {
         if (this.syncType == SyncType.Sync) {
-            if (this.Id == "") {
-                throw 'Error: You must put ID in Sync Helper.';
-            }
             this.multiplay = multiplaySample.instance.multiplay;
             this.SyncInit();
         }
@@ -70,36 +89,47 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
                     console.log("NoneSyncDDD");
                     break;
             }
-            switch (+this.loopType) {
-                case LoopType.circle:
+            switch (+this.tweenType) {
+                case TweenType.Circulation:
                     if (this.nextIndex == this.TweenPosition.length - 1) {
                         this.nextIndex = 0;
+                        this.loopCount++;
                     } else
                         this.nextIndex++;
                     break;
-                case LoopType.straight:
+                case TweenType.Linear:
                     if (this.nextIndex == this.TweenPosition.length - 1) {
                         this.straightDir = false;
+                        this.loopCount++;
                     } else if (this.nextIndex == 0) {
                         this.straightDir = true;
                     }
                     this.nextIndex = this.straightDir ? this.nextIndex + 1 : this.nextIndex - 1;
                     break;
-                case LoopType.NotLoop:
+                case TweenType.TeleportFirstPoint:
                     if(this.nextIndex == this.TweenPosition.length - 1){
-                        this.isEndPoint =true;
+                        this.transform.position = this.TweenPosition[0];
+                        this.nextIndex = 1 ;
+                        this.loopCount++;
                     }
                     else{
                         this.nextIndex++;
-                        this.isEndPoint =false;
                     }
                     break;
             }
-            if(this.isMasterClient && !this.isEndPoint){
-                this.SendPoint()
+            if(this.isMasterClient && !this.isEnd){
+                this.SendPoint();
+            }
+            if(!this.isEnd){
+                if(this.loopType != LoopType.Repeat){
+                    if(this.loopCount >= this.loopType){
+                        this.isEnd = true;
+                    }
+                }
             }
         }
-        this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed * 0.1);
+        if(!this.isEnd)
+            this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed * 0.1);
     }
 
     SyncInit(){
