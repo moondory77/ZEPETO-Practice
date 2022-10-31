@@ -5,6 +5,7 @@ import {ZepetoWorldMultiplay} from "ZEPETO.World";
 import {Room, RoomData} from "ZEPETO.Multiplay";
 import multiplaySample from './multiplaySample';
 import { transform } from 'typescript';
+import SyncIndexManager from './SyncIndexManager';
 
 export enum SyncType {
     Sync = 0,
@@ -35,7 +36,6 @@ interface inforTween{
 export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
     @HideInInspector() public isMasterClient: boolean = false;
 
-    @SerializeField() private Id: string = "";
     @SerializeField() private syncType: SyncType = SyncType.Sync;
     @SerializeField() private tweenType: TweenType = TweenType.Circulation;
     @SerializeField() private loopType: LoopType = LoopType.Repeat;
@@ -44,6 +44,7 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
 
     private multiplay: ZepetoWorldMultiplay;
     private room: Room;
+    private Id: string = "";
 
     private nowIndex: number;
     private nextIndex: number;
@@ -54,13 +55,6 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
     private isEnd : boolean;
 
     Awake() {
-
-        if (this.syncType == SyncType.Sync) {
-            if (this.Id == "") {
-                throw 'Error: You must put ID in Sync Helper.';
-                return;
-            }
-        }
         if(this.TweenPosition.length<2){
             throw 'Error: Enter at least two positions in the Twin Position.';
             return;
@@ -72,6 +66,8 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
     }
 
     Start() {
+        SyncIndexManager.SyncIndex++;
+        this.Id = SyncIndexManager.SyncIndex.toString();
         if (this.syncType == SyncType.Sync) {
             this.multiplay = multiplaySample.instance.multiplay;
             this.SyncInit();
@@ -81,14 +77,6 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
         if (this.transform.position == this.TweenPosition[this.nextIndex]) {
             this.nowIndex = this.nextIndex;
 
-            switch (+this.syncType) {
-                case SyncType.Sync:
-                    console.log("Syncaaa");
-                    break;
-                case SyncType.NoneSync:
-                    console.log("NoneSyncDDD");
-                    break;
-            }
             switch (+this.tweenType) {
                 case TweenType.Circulation:
                     if (this.nextIndex == this.TweenPosition.length - 1) {

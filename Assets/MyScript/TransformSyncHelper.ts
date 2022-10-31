@@ -4,6 +4,7 @@ import multiplaySample from "./multiplaySample";
 import {Room, RoomData} from "ZEPETO.Multiplay";
 import {ZepetoWorldMultiplay} from "ZEPETO.World";
 import {ZepetoPlayers} from "ZEPETO.Character.Controller";
+import SyncIndexManager from "./SyncIndexManager";
 
 interface tf {
     Id: string,
@@ -16,24 +17,23 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     @HideInInspector() public isMasterClient: boolean = false;
     @HideInInspector() public isSync: boolean = false;
 
-    @SerializeField() private Id: string="";
     @SerializeField() private SyncPosition: boolean = true;
     @SerializeField() private SyncRotation: boolean = true;
     @SerializeField() private SyncScale: boolean = true;
 
     private multiplay: ZepetoWorldMultiplay;
     private room: Room;
+    private Id: string="";
 
     Start() {
+        SyncIndexManager.SyncIndex++;
+        this.Id = SyncIndexManager.SyncIndex.toString();
         //하나라도 동기화 하면
         if (this.SyncPosition || this.SyncRotation || this.SyncScale) {
             this.isSync = true;
         }
 
         if (this.isSync) {
-            if (this.Id == "") {
-                throw 'Error: You must put ID in Sync Helper.';
-            }
             this.multiplay = multiplaySample.instance.multiplay;
             this.SyncTransform();
         }
