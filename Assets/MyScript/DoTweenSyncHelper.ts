@@ -51,7 +51,7 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
 
     private straightDir: boolean = true;
 
-    private loopCountDouble: number;
+    private loopCountDouble: number;    // 끝 지점 도달당 1씩 카운트 즉 1번 순회 = 2, 
     private isEnd: boolean;
     
     private Awake() {
@@ -88,13 +88,11 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
                     break;
                 case TweenType.Linear:
                     if (this.nowIndex == this.TweenPosition.length - 1) {
-                        this.straightDir = false;
                         this.loopCountDouble++;
-                    } else if (this.nextIndex == 0) {
-                        this.straightDir = true;
+                    } else if (this.nowIndex == 0) {
                         this.loopCountDouble++;
                     }
-                    this.nextIndex = this.straightDir ? this.nowIndex + 1 : this.nowIndex - 1;
+                    this.nextIndex = this.loopCountDouble%2==0 ? this.nowIndex + 1 : this.nowIndex - 1;
                     break;
                 case TweenType.TeleportFirstPoint:
                     if (this.nowIndex == this.TweenPosition.length - 1) {
@@ -110,7 +108,8 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
                     break;
             }
             if (this.isMasterClient && !this.isEnd) {
-                this.SendPoint();
+                // this.SendPoint();
+                // 매 포인트 마다 동기화?
             }
             if (!this.isEnd) {
                 this.EndCheck();

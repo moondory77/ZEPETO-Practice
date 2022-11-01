@@ -3,14 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="1e8a459e-3d52-4294-abc0-5e9513d0655c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/Clicker.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/Clicker.ts.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SampleScene.unity" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SampleScene.unity.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/index.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/index.js.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/relocate-loader.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/relocate-loader.js.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/shebang-loader.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/shebang-loader.js.cache" afterDir="false" />
@@ -76,7 +73,7 @@
       <workItem from="1666849816668" duration="1910000" />
       <workItem from="1666919248422" duration="20642000" />
       <workItem from="1667178208955" duration="4740000" />
-      <workItem from="1667264129240" duration="7157000" />
+      <workItem from="1667264129240" duration="10605000" />
     </task>
     <servers />
   </component>
