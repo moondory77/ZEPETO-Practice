@@ -4,7 +4,6 @@ import TransformSyncHelper from './TransformSyncHelper';
 import {ZepetoWorldMultiplay} from "ZEPETO.World";
 import {Room, RoomData} from "ZEPETO.Multiplay";
 import multiplaySample from './multiplaySample';
-import {transform} from 'typescript';
 import SyncIndexManager from './SyncIndexManager';
 
 export enum SyncType {
@@ -52,18 +51,15 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
 
     private straightDir: boolean = true;
 
-    private loopCount: number;
+    private loopCountDouble: number;
     private isEnd: boolean;
-
+    
     private Awake() {
         if (this.TweenPosition.length < 2) {
             throw 'Error: Enter at least two positions in the Twin Position.';
             return;
         }
-        this.nowIndex = 0;
-        this.nextIndex = 1;
-        this.loopCount = 0;
-        this.isEnd = false;
+        this.ResetTween();
     }
 
     private Start() {
@@ -83,32 +79,32 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
                 case TweenType.Circulation:
                     if (this.nowIndex == this.TweenPosition.length - 1) {
                         this.nextIndex = 0;
-                        this.loopCount++;
+                        this.loopCountDouble++;
                     } else if (this.nowIndex == 0) {
                         this.nextIndex++;
-                        this.loopCount++;
+                        this.loopCountDouble++;
                     } else
                         this.nextIndex++;
                     break;
                 case TweenType.Linear:
                     if (this.nowIndex == this.TweenPosition.length - 1) {
                         this.straightDir = false;
-                        this.loopCount++;
+                        this.loopCountDouble++;
                     } else if (this.nextIndex == 0) {
                         this.straightDir = true;
-                        this.loopCount++;
+                        this.loopCountDouble++;
                     }
                     this.nextIndex = this.straightDir ? this.nowIndex + 1 : this.nowIndex - 1;
                     break;
                 case TweenType.TeleportFirstPoint:
                     if (this.nowIndex == this.TweenPosition.length - 1) {
-                        this.transform.position = this.TweenPosition[0];
+                        if(this.loopType != LoopType.JustOneWay){
+                            this.transform.position = this.TweenPosition[0];
+                            this.loopCountDouble++;
+                        }
                         this.nextIndex = 1;
-                        this.loopCount++;
-                    } else if (this.nowIndex == 0) {
-                        this.nextIndex++;
-                        this.loopCount++;
-                    } else {
+                        this.loopCountDouble++;
+                    }else {
                         this.nextIndex++;
                     }
                     break;
@@ -141,7 +137,7 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
                     this.room.AddMessageHandler(syncId, (message: inforTween) => {
                         this.transform.position = this.ParseVector3(message.position);
                         this.nextIndex = message.nextIndex;
-                        this.loopCount = message.loopCount;
+                        this.loopCountDouble = message.loopCount;
                         this.EndCheck();
                     });
                 }
@@ -151,12 +147,20 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
 
     private EndCheck() {
         if (this.loopType != LoopType.Repeat) {
-            if (this.loopCount >= this.loopType) {
+            if (this.loopCountDouble >= this.loopType) {
                 this.isEnd = true;
             }
         }
     }
 
+    public ResetTween(){
+        this.transform.position = this.TweenPosition[0];
+        this.nowIndex = 0;
+        this.nextIndex = 1;
+        this.loopCountDouble = 0;
+        this.isEnd = false;
+    }
+    
     private SendPoint() {
         const data = new RoomData();
         data.Add("Id", this.Id);
@@ -167,10 +171,11 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
         pos.Add("z", this.transform.localPosition.z);
         data.Add("position", pos.GetObject());
         data.Add("nextIndex", this.nextIndex);
-        data.Add("loopCount", this.loopCount);
+        data.Add("loopCount", this.loopCountDouble);
 
         this.room.Send("SyncTween", data.GetObject());
     }
+    
 
     private ParseVector3(vector3: Vector3): Vector3 {
         return new Vector3(vector3.x, vector3.y, vector3.z);

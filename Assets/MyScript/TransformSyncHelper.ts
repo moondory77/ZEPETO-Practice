@@ -55,7 +55,7 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
                     //처음 마스터가 되면
                     if(!this.isMasterClient) {
                         this.isMasterClient = true;
-                        this.StartCoroutine(this.SyncPositionSend(0.04));
+                        this.StartCoroutine(this.CheckChangeTransform(0.04));
                     }
                     this.SendTransform(this.transform);
                     console.log("ImMasterClient");
@@ -82,13 +82,12 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
         };
     }
 
-    //일정 시간마다 서버로 현재 위치를 보냄
-    * SyncPositionSend(tick: number) {
+    //트랜스폼 변경 확인
+    * CheckChangeTransform(tick: number) {
         let pastPos: Vector3 = this.transform.position;
         let pastRot: Vector3 = this.transform.rotation.eulerAngles;
         let pastScale: Vector3 = this.transform.localScale;
         let syncNowFrame : boolean = false;
-
         
         while (true) {
             if (this.SyncPosition) {
@@ -109,11 +108,10 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
                     syncNowFrame = true;
                 }
             }
+            //변한 값이 있으면 전송
             if(syncNowFrame) {
                 this.SendTransform(this.transform);
                 syncNowFrame = false;
-
-                console.log(this.transform.name);
             }
                 
             yield new WaitForSeconds(tick);

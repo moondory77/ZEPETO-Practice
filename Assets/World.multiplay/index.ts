@@ -28,16 +28,7 @@ export default class extends Sandbox {
             // Broadcast all connected client
             this.broadcast("echo", "echo to all : " + message);
         });
-        this.onMessage("Click", (client, message) => {
-            console.log(`Click ${client.sessionId}, -> ${message}`);
-
-            // send current client
-            client.send("Clicks", "echo to sender : " + message);
-
-            // Broadcast all connected client
-            this.broadcast("Click", "echo to all : " + message);
-        });
-
+        
         this.onMessage("SyncTransform", (client, message:tf) => {
             let syncTransform:tf = {
                 Id :message.Id,
@@ -57,6 +48,7 @@ export default class extends Sandbox {
             };
             this.broadcast("SyncTween"+message.Id, syncTween);
         });
+        
         this.onMessage("CheckMaster", (client, message) => {
             if(this.masterClientSessionId != this.sessionIdQueue[0]) {
                 this.masterClientSessionId = this.sessionIdQueue[0];
@@ -71,7 +63,6 @@ export default class extends Sandbox {
         this.sessionIdQueue.push(client.sessionId.toString());
         if(this.masterClientSessionId != this.sessionIdQueue[0]) {
             this.masterClientSessionId = this.sessionIdQueue[0];
-            console.log("master->", this.masterClientSessionId)
         }
         console.log("join");
         
