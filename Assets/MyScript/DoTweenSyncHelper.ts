@@ -4,7 +4,7 @@ import TransformSyncHelper from './TransformSyncHelper';
 import {ZepetoWorldMultiplay} from "ZEPETO.World";
 import {Room, RoomData} from "ZEPETO.Multiplay";
 import multiplaySample from './multiplaySample';
-import { transform } from 'typescript';
+import {transform} from 'typescript';
 import SyncIndexManager from './SyncIndexManager';
 
 export enum SyncType {
@@ -22,17 +22,18 @@ export enum TweenType {
 }
 
 export enum LoopType {
-    Repeat =0,
-    
+    Repeat = 0,
     JustOneWay,
     JustOneRoundTrip
 }
 
-interface inforTween{
+interface inforTween {
     Id: string,
     position: Vector3,
-    nextIndex : number
+    nextIndex: number,
+    loopCount: number
 }
+
 export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
     @HideInInspector() public isMasterClient: boolean = false;
 
@@ -49,23 +50,23 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
     private nowIndex: number;
     private nextIndex: number;
 
-    private straightDir :boolean =  true;
-    
-    private loopCount:number;
-    private isEnd : boolean;
+    private straightDir: boolean = true;
 
-    Awake() {
-        if(this.TweenPosition.length<2){
+    private loopCount: number;
+    private isEnd: boolean;
+
+    private Awake() {
+        if (this.TweenPosition.length < 2) {
             throw 'Error: Enter at least two positions in the Twin Position.';
             return;
         }
         this.nowIndex = 0;
-        this.nextIndex =1;
-        this.loopCount =0;
+        this.nextIndex = 1;
+        this.loopCount = 0;
         this.isEnd = false;
     }
 
-    Start() {
+    private Start() {
         SyncIndexManager.SyncIndex++;
         this.Id = SyncIndexManager.SyncIndex.toString();
         if (this.syncType == SyncType.Sync) {
@@ -73,54 +74,57 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
             this.SyncInit();
         }
     }
-    FixedUpdate() {
+
+    private FixedUpdate() {
         if (this.transform.position == this.TweenPosition[this.nextIndex]) {
             this.nowIndex = this.nextIndex;
 
             switch (+this.tweenType) {
                 case TweenType.Circulation:
-                    if (this.nextIndex == this.TweenPosition.length - 1) {
+                    if (this.nowIndex == this.TweenPosition.length - 1) {
                         this.nextIndex = 0;
+                        this.loopCount++;
+                    } else if (this.nowIndex == 0) {
+                        this.nextIndex++;
                         this.loopCount++;
                     } else
                         this.nextIndex++;
                     break;
                 case TweenType.Linear:
-                    if (this.nextIndex == this.TweenPosition.length - 1) {
+                    if (this.nowIndex == this.TweenPosition.length - 1) {
                         this.straightDir = false;
                         this.loopCount++;
                     } else if (this.nextIndex == 0) {
                         this.straightDir = true;
-                    }
-                    this.nextIndex = this.straightDir ? this.nextIndex + 1 : this.nextIndex - 1;
-                    break;
-                case TweenType.TeleportFirstPoint:
-                    if(this.nextIndex == this.TweenPosition.length - 1){
-                        this.transform.position = this.TweenPosition[0];
-                        this.nextIndex = 1 ;
                         this.loopCount++;
                     }
-                    else{
+                    this.nextIndex = this.straightDir ? this.nowIndex + 1 : this.nowIndex - 1;
+                    break;
+                case TweenType.TeleportFirstPoint:
+                    if (this.nowIndex == this.TweenPosition.length - 1) {
+                        this.transform.position = this.TweenPosition[0];
+                        this.nextIndex = 1;
+                        this.loopCount++;
+                    } else if (this.nowIndex == 0) {
+                        this.nextIndex++;
+                        this.loopCount++;
+                    } else {
                         this.nextIndex++;
                     }
                     break;
             }
-            if(this.isMasterClient && !this.isEnd){
+            if (this.isMasterClient && !this.isEnd) {
                 this.SendPoint();
             }
-            if(!this.isEnd){
-                if(this.loopType != LoopType.Repeat){
-                    if(this.loopCount >= this.loopType){
-                        this.isEnd = true;
-                    }
-                }
+            if (!this.isEnd) {
+                this.EndCheck();
             }
         }
-        if(!this.isEnd)
+        if (!this.isEnd)
             this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed * 0.1);
     }
 
-    SyncInit(){
+    private SyncInit() {
         const syncId: string = "SyncTween" + this.Id;
         this.multiplay.RoomJoined += (room: Room) => {
             this.room = room;
@@ -133,17 +137,27 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
                     }
                     console.log("ImMasterClient");
                     this.SendPoint();
-                }
-                else{
+                } else {
                     this.room.AddMessageHandler(syncId, (message: inforTween) => {
                         this.transform.position = this.ParseVector3(message.position);
                         this.nextIndex = message.nextIndex;
+                        this.loopCount = message.loopCount;
+                        this.EndCheck();
                     });
                 }
             });
         }
     }
-    private SendPoint(){
+
+    private EndCheck() {
+        if (this.loopType != LoopType.Repeat) {
+            if (this.loopCount >= this.loopType) {
+                this.isEnd = true;
+            }
+        }
+    }
+
+    private SendPoint() {
         const data = new RoomData();
         data.Add("Id", this.Id);
 
@@ -153,6 +167,7 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
         pos.Add("z", this.transform.localPosition.z);
         data.Add("position", pos.GetObject());
         data.Add("nextIndex", this.nextIndex);
+        data.Add("loopCount", this.loopCount);
 
         this.room.Send("SyncTween", data.GetObject());
     }

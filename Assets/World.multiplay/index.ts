@@ -10,7 +10,8 @@ interface tf{
 interface inforTween{
     Id: string,
     position: Vector3,
-    nextIndex : number
+    nextIndex : number,
+    loopCount:number
 }
 
 export default class extends Sandbox {
@@ -52,6 +53,7 @@ export default class extends Sandbox {
                 Id :message.Id,
                 position :message.position,
                 nextIndex : message.nextIndex,
+                loopCount :message.loopCount
             };
             this.broadcast("SyncTween"+message.Id, syncTween);
         });

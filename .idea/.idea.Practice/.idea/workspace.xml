@@ -8,9 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/index.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/index.js.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/relocate-loader.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/relocate-loader.js.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/shebang-loader.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/shebang-loader.js.cache" afterDir="false" />
@@ -76,6 +74,7 @@
       <workItem from="1666849816668" duration="1910000" />
       <workItem from="1666919248422" duration="20642000" />
       <workItem from="1667178208955" duration="4740000" />
+      <workItem from="1667264129240" duration="2101000" />
     </task>
     <servers />
   </component>
