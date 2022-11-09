@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 564361696}
   - component: {fileID: 564361695}
   - component: {fileID: 564361694}
+  - component: {fileID: 564361698}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -403,6 +404,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &564361698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564361693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1673316429, guid: 921f0445823004a16a499d629dd566a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  script:
+    keys:
+    - syncType
+    - tweenType
+    - loopType
+    - TweenPosition
+    - moveSpeed
+    unityValues:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    values:
+    - '{"type":"System.String, mscorlib","value":"0"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
+    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":0,\"type\":\"UnityEngine.Vector3,
+      UnityEngine.CoreModule\",\"isUnity\":false}"}'
+    - '{"type":"System.Single, mscorlib","value":"1"}'
+    unityArrayValues: []
+    arrayValues: []
+    script: {fileID: 4458252877524076426, guid: d88e9733c90ff4c318c9bac952ae4cb5, type: 3}
+    isExpaned: 0
 --- !u!1 &764827637
 GameObject:
   m_ObjectHideFlags: 0

@@ -86,10 +86,10 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                 };
 
                 // Cache the server's game start time. 
-                this.gameStartTimestampFromServer = Number(timestampInfo.gameStartTimestamp);
+                this.gameStartTimestampFromServer = timestampInfo.gameStartTimestamp;
 
                 // Catche the player join time from the server. 
-                let playerJoinTimestampFromServer = Number(timestampInfo.playerJoinTimestamp);
+                let playerJoinTimestampFromServer = timestampInfo.playerJoinTimestamp;
 
                 // Current client time. 
                 let curClientTimeStamp = +new Date();

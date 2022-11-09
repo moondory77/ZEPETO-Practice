@@ -14,9 +14,18 @@ interface inforTween{
     loopCount:number
 }
 
+interface PlayerTimestamp {
+    gameStartTimestamp:number,
+    playerJoinTimestamp:number;
+}
+
 export default class extends Sandbox {
     private sessionIdQueue: string[] = [];
     private masterClientSessionId: string;
+
+    private gameStartTimestamp:number;
+    private isFirstPlayer:boolean;
+    
 
     onCreate(options: SandboxOptions) {
         this.onMessage("echo", (client, message) => {
@@ -60,6 +69,24 @@ export default class extends Sandbox {
     }
 
     onJoin(client: SandboxPlayer) {
+        // 게임시작 시 timestamp 기록 
+        // - 여기에서는 첫 번째 플레이어가 입장하는 순간이 게임시작 시간
+        if(this.isFirstPlayer) {
+            this.isFirstPlayer = false;
+            let gameStartTimestamp = + new Date();
+            this.gameStartTimestamp = gameStartTimestamp;
+        }
+
+        // 플레이어 입장 시의 timestamp 기록
+        let curTimeStamp = + new Date();
+        let timeStampInfo:PlayerTimestamp = {
+            gameStartTimestamp : this.gameStartTimestamp,
+            playerJoinTimestamp : curTimeStamp
+        };
+        // timestamp를 전송
+        client.send("ServerTimestamp", timeStampInfo);
+        
+        
         this.sessionIdQueue.push(client.sessionId.toString());
         if(this.masterClientSessionId != this.sessionIdQueue[0]) {
             this.masterClientSessionId = this.sessionIdQueue[0];
