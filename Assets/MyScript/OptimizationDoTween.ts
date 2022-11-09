@@ -76,37 +76,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
             this.multiplay = multiplaySample.instance.multiplay;
             this.SyncInit();
         }
-        this.multiplay.RoomJoined += (room: Room) => {
-            this.room = room;
-            this.room.AddMessageHandler("ServerTimeStamp", (message: PlayerTimestamp) => {
-
-                let timestampInfo: PlayerTimestamp = {
-                    gameStartTimestamp: message.gameStartTimestamp,
-                    playerJoinTimestamp: message.playerJoinTimestamp
-                };
-
-                // Cache the server's game start time. 
-                this.gameStartTimestampFromServer = timestampInfo.gameStartTimestamp;
-
-                // Catche the player join time from the server. 
-                let playerJoinTimestampFromServer = timestampInfo.playerJoinTimestamp;
-
-                // Current client time. 
-                let curClientTimeStamp = +new Date();
-
-                // Save the difference between the server timestamp and the client timestamp. 
-                // - For applying the difference after returning from the background. 
-                let diff: number = curClientTimeStamp - playerJoinTimestampFromServer;
-                this.diffTimestamp = diff; // save the time difference. 
-
-                // Elapsed time since game start. 
-                let elapsedTime = playerJoinTimestampFromServer - this.gameStartTimestampFromServer;
-
-                // Convert to seconds for block movement calculation. 
-                let timestampSecond = elapsedTime / 1000;
-
-            });
-        }
+            
     }
 
     private FixedUpdate() {
@@ -161,8 +131,8 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
         const syncId: string = "SyncTween" + this.Id;
         this.multiplay.RoomJoined += (room: Room) => {
             this.room = room;
-            this.room.Send("CheckMaster")
-            this.room.AddMessageHandler("CheckMaster", (MasterClientSessionId) => {
+            this.room.Send("CheckMasterOP")
+            this.room.AddMessageHandler("CheckMasterOP", (MasterClientSessionId) => {
                 if (this.room.SessionId == MasterClientSessionId) {
                     //처음 마스터가 되면
                     if (!this.isMasterClient) {
@@ -171,6 +141,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                     console.log("ImMasterClient");
                     this.SendPoint();
                 } else {
+                    //add리스너 하나만으로 수정 필요 @
                     this.room.AddMessageHandler(syncId, (message: inforTween) => {
                         this.transform.position = this.ParseVector3(message.position);
                         this.nextIndex = message.nextIndex;
@@ -178,6 +149,36 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                         this.EndCheck();
                     });
                 }
+            });
+            this.room.AddMessageHandler("ServerTimestamp", (message: PlayerTimestamp) => {
+                console.log("@@####");
+                let timestampInfo: PlayerTimestamp = {
+                    gameStartTimestamp: message.gameStartTimestamp,
+                    playerJoinTimestamp: message.playerJoinTimestamp
+                };
+                // Cache the server's game start time. 
+                this.gameStartTimestampFromServer = Number(timestampInfo.gameStartTimestamp);
+
+                console.log(this.gameStartTimestampFromServer);
+                // Catche the player join time from the server. 
+                let playerJoinTimestampFromServer = Number(timestampInfo.playerJoinTimestamp);
+                console.log(playerJoinTimestampFromServer);
+
+                // Current client time. 
+                let curClientTimeStamp = +new Date();
+
+                // Save the difference between the server timestamp and the client timestamp. 
+                // - For applying the difference after returning from the background. 
+                let diff: number = curClientTimeStamp - playerJoinTimestampFromServer;
+                this.diffTimestamp = diff; // save the time difference. 
+
+                // Elapsed time since game start. 
+                let elapsedTime = playerJoinTimestampFromServer - this.gameStartTimestampFromServer;
+
+                // Convert to seconds for block movement calculation. 
+                let timestampSecond = elapsedTime / 1000;
+                console.log(timestampSecond);
+                console.log("@@@@@@");
             });
         }
     }
