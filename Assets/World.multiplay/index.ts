@@ -13,18 +13,19 @@ interface inforTween{
     nextIndex : number,
     loopCount:number
 }
-
-interface PlayerTimestamp {
-    gameStartTimestamp:number,
-    playerJoinTimestamp:number;
+interface inforTweenOptimization{
+    Id: string,
+    position: Vector3,
+    nextIndex : number,
+    loopCount:number,
+    masterTimeStemp:number
 }
+
 
 export default class extends Sandbox {
     private sessionIdQueue: string[] = [];
     private masterClientSessionId: string;
 
-    private gameStartTimestamp:number;
-    private isFirstPlayer:boolean = true;
     
 
     onCreate(options: SandboxOptions) {
@@ -58,6 +59,17 @@ export default class extends Sandbox {
             this.broadcast("SyncTween"+message.Id, syncTween);
         });
         
+        this.onMessage("SyncTweenOptimization", (client, message:inforTweenOptimization) => {
+            let syncTween:inforTweenOptimization = {
+                Id :message.Id,
+                position :message.position,
+                nextIndex : message.nextIndex,
+                loopCount :message.loopCount,
+                masterTimeStemp :message.masterTimeStemp
+            };
+            this.broadcast("SyncTweenOptimization"+message.Id, syncTween);
+        });
+        
         this.onMessage("CheckMaster", (client, message) => {
             if(this.masterClientSessionId != this.sessionIdQueue[0]) {
                 this.masterClientSessionId = this.sessionIdQueue[0];
@@ -65,31 +77,7 @@ export default class extends Sandbox {
             }
             this.broadcast("CheckMaster", this.masterClientSessionId);
         });
-        this.onMessage("CheckMasterOP", (client, message) => {
-            if(this.masterClientSessionId != this.sessionIdQueue[0]) {
-                this.masterClientSessionId = this.sessionIdQueue[0];
-                console.log("master->", this.masterClientSessionId)
-            }
-            this.broadcast("CheckMasterOP", this.masterClientSessionId);
-            // 게임시작 시 timestamp 기록 
-            // - 여기에서는 첫 번째 플레이어가 입장하는 순간이 게임시작 시간
-            if(this.isFirstPlayer) {
-                this.isFirstPlayer = false;
-                let gameStartTimestamp = + new Date();
-                this.gameStartTimestamp = gameStartTimestamp;
-            }
-
-            // 플레이어 입장 시의 timestamp 기록
-            let curTimeStamp = + new Date();
-            let timeStampInfo:PlayerTimestamp = {
-                gameStartTimestamp : this.gameStartTimestamp,
-                playerJoinTimestamp : curTimeStamp
-            };
-            // timestamp를 전송
-            client.send("ServerTimestamp", timeStampInfo);
-            console.log("@@@@");
-            console.log(timeStampInfo);
-        });
+        
     }
 
     onJoin(client: SandboxPlayer) {

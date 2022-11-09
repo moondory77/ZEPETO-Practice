@@ -1,4 +1,4 @@
-import {Vector3} from 'UnityEngine';
+import {Time, Vector3} from 'UnityEngine';
 import {ZepetoScriptBehaviour} from 'ZEPETO.Script'
 import TransformSyncHelper from './TransformSyncHelper';
 import {ZepetoWorldMultiplay} from "ZEPETO.World";
@@ -30,7 +30,8 @@ interface inforTween {
     Id: string,
     position: Vector3,
     nextIndex: number,
-    loopCount: number
+    loopCount: number,
+    masterTimeStemp:number
 }
 
 interface PlayerTimestamp {
@@ -60,7 +61,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
 
     private loopCountDouble: number;    // 끝 지점 도달당 1씩 카운트 즉 1번 순회 = 2, 
     private isEnd: boolean;
-
+    private timer :number =0;
     private Awake() {
         if (this.TweenPosition.length < 2) {
             throw 'Error: Enter at least two positions in the Twin Position.';
@@ -81,6 +82,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
 
     private FixedUpdate() {
         if (this.transform.position == this.TweenPosition[this.nextIndex]) {
+            console.log(this.timer);
             this.nowIndex = this.nextIndex;
 
             switch (+this.tweenType) {
@@ -123,16 +125,19 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                 this.EndCheck();
             }
         }
-        if (!this.isEnd)
+        if (!this.isEnd) {
             this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed * 0.1);
+            
+            this.timer += Time.deltaTime;
+        }
     }
 
     private SyncInit() {
-        const syncId: string = "SyncTween" + this.Id;
+        const syncId: string = "SyncTweenOptimization" + this.Id;
         this.multiplay.RoomJoined += (room: Room) => {
             this.room = room;
-            this.room.Send("CheckMasterOP")
-            this.room.AddMessageHandler("CheckMasterOP", (MasterClientSessionId) => {
+            this.room.Send("CheckMaster")
+            this.room.AddMessageHandler("CheckMaster", (MasterClientSessionId) => {
                 if (this.room.SessionId == MasterClientSessionId) {
                     //처음 마스터가 되면
                     if (!this.isMasterClient) {
@@ -141,16 +146,32 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                     console.log("ImMasterClient");
                     this.SendPoint();
                 } else {
-                    //add리스너 하나만으로 수정 필요 @
-                    this.room.AddMessageHandler(syncId, (message: inforTween) => {
-                        this.transform.position = this.ParseVector3(message.position);
-                        this.nextIndex = message.nextIndex;
-                        this.loopCountDouble = message.loopCount;
-                        this.EndCheck();
-                    });
                 }
             });
-            this.room.AddMessageHandler("ServerTimestamp", (message: PlayerTimestamp) => {
+            this.room.AddMessageHandler(syncId, (message: inforTween) => {
+                this.transform.position = this.ParseVector3(message.position);
+                this.nextIndex = message.nextIndex;
+                this.loopCountDouble = message.loopCount;
+                this.EndCheck();
+
+                //server sync
+                let getPos = this.ParseVector3(message.position);
+                let dir = Vector3.Normalize(this.TweenPosition[this.nextIndex] - getPos);
+
+                let curClientTimeStamp = +new Date();
+                let DiffTime = Number(curClientTimeStamp) - Number(message.masterTimeStemp); 
+                console.log(DiffTime);
+                
+                let DiffPos = dir * 1 *this.moveSpeed;
+                let pos = getPos + DiffPos;
+                console.log(pos);
+                
+                this.transform.position = getPos;
+                // this.transform.position = pos;
+            });
+            
+            //처음 동기화에 포지션과 방장의 타임스탬프를 같이 받고 Diff(딜레이) = 방장의 타임스탬프 - 내 타임스탬프, 시작할 포지션 = 받은 포지션 + 진행방향 * Diff(초) 
+            /*this.room.AddMessageHandler("ServerTimestamp", (message: PlayerTimestamp) => {
                 console.log("@@####");
                 let timestampInfo: PlayerTimestamp = {
                     gameStartTimestamp: message.gameStartTimestamp,
@@ -171,15 +192,15 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                 // - For applying the difference after returning from the background. 
                 let diff: number = curClientTimeStamp - playerJoinTimestampFromServer;
                 this.diffTimestamp = diff; // save the time difference. 
-
+                console.log(this.diffTimestamp);
                 // Elapsed time since game start. 
                 let elapsedTime = playerJoinTimestampFromServer - this.gameStartTimestampFromServer;
-
+                console.log(elapsedTime);
                 // Convert to seconds for block movement calculation. 
                 let timestampSecond = elapsedTime / 1000;
                 console.log(timestampSecond);
                 console.log("@@@@@@");
-            });
+            });*/
         }
     }
 
@@ -208,10 +229,14 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
         pos.Add("y", this.transform.localPosition.y);
         pos.Add("z", this.transform.localPosition.z);
         data.Add("position", pos.GetObject());
+        
         data.Add("nextIndex", this.nextIndex);
         data.Add("loopCount", this.loopCountDouble);
-
-        this.room.Send("SyncTween", data.GetObject());
+        
+        let curClientTimeStamp = +new Date();
+        data.Add("masterTimeStemp", curClientTimeStamp);
+        
+        this.room.Send("SyncTweenOptimization", data.GetObject());
     }
 
 

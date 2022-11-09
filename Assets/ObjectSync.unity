@@ -143,7 +143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &25387230
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -398,7 +398,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564361693}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 0, z: 0}
+  m_LocalPosition: {x: 9.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -418,11 +418,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script:
     keys:
-    - syncType
-    - tweenType
-    - loopType
-    - TweenPosition
     - moveSpeed
+    - TweenPosition
+    - loopType
+    - tweenType
+    - syncType
     unityValues:
     - {fileID: 0}
     - {fileID: 0}
@@ -430,14 +430,16 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     values:
-    - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":0,\"type\":\"UnityEngine.Vector3,
-      UnityEngine.CoreModule\",\"isUnity\":false}"}'
     - '{"type":"System.Single, mscorlib","value":"1"}'
+    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":2,\"type\":\"UnityEngine.Vector3,
+      UnityEngine.CoreModule\",\"isUnity\":false}"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
     unityArrayValues: []
-    arrayValues: []
+    arrayValues:
+    - '{"x":0.0,"y":0.0,"z":0.0}'
+    - '{"x":10.0,"y":0.0,"z":0.0}'
     script: {fileID: 4458252877524076426, guid: d88e9733c90ff4c318c9bac952ae4cb5, type: 3}
     isExpaned: 0
 --- !u!1 &764827637
@@ -459,7 +461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &764827638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,7 +684,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &888174940
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1118,7 +1120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1536277129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1257,7 +1259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2100135815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1382,7 +1384,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2116767824
 MonoBehaviour:
   m_ObjectHideFlags: 0
