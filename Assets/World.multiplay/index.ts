@@ -67,9 +67,15 @@ export default class extends Sandbox {
                 loopCount :message.loopCount,
                 masterTimeStemp :message.masterTimeStemp
             };
+            console.log(message.position);
             this.broadcast("SyncTweenOptimization"+message.Id, syncTween);
         });
         
+        this.onMessage("RequestPosition", (client, message:string) => {
+            this.broadcast("RequestPosition"+message,"");
+            console.log("RequestPosition"+message);
+        });
+
         this.onMessage("CheckMaster", (client, message) => {
             if(this.masterClientSessionId != this.sessionIdQueue[0]) {
                 this.masterClientSessionId = this.sessionIdQueue[0];

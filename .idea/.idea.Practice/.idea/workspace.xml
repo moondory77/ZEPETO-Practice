@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1e8a459e-3d52-4294-abc0-5e9513d0655c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ObjectSync.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ObjectSync.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +65,8 @@
       <workItem from="1666919248422" duration="20642000" />
       <workItem from="1667178208955" duration="4740000" />
       <workItem from="1667264129240" duration="10605000" />
-      <workItem from="1667969340798" duration="8326000" />
+      <workItem from="1667969340798" duration="9456000" />
+      <workItem from="1668042245785" duration="7424000" />
     </task>
     <servers />
   </component>
