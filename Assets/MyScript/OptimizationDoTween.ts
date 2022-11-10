@@ -30,8 +30,7 @@ interface inforTween {
     Id: string,
     position: Vector3,
     nextIndex: number,
-    loopCount: number,
-    masterTimeStemp: number
+    loopCount: number
 }
 
 interface PlayerTimestamp {
@@ -46,7 +45,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
     @SerializeField() private tweenType: TweenType = TweenType.Circulation;
     @SerializeField() private loopType: LoopType = LoopType.Repeat;
     @SerializeField() private TweenPosition: Vector3[];
-    @SerializeField() private moveSpeed: number = 1;
+    @SerializeField() private moveSpeed: number = 0.1;
 
     private gameStartTimestampFromServer: number = 0;
     private diffTimestamp: number = 0;
@@ -58,19 +57,30 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
     private nowIndex: number;
     private nextIndex: number;
 
-    private straightDir: boolean = true;
+    private straightDir: boolean;
 
     private loopCountDouble: number;    // 끝 지점 도달당 1씩 카운트, 즉 1번 순회 => loopCountDouble 2, 
     private isEnd: boolean;
     
     private ReceiveRequest: boolean;
+    private RequestTime :number;
 
+    private Init() {
+        this.transform.position = this.TweenPosition[0];
+        this.nowIndex = 0;
+        this.nextIndex = 1;
+        this.loopCountDouble = 0;
+        this.isEnd = false;
+        this.straightDir = true;
+        this.ReceiveRequest = true;
+    }
+    
     private Awake() {
         if (this.TweenPosition.length < 2) {
             throw 'Error: Enter at least two positions in the Twin Position.';
             return;
         }
-        this.ResetTween();
+        this.Init();
     }
 
     private Start() {
@@ -80,7 +90,6 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
             this.multiplay = multiplaySample.instance.multiplay;
             this.SyncInit();
         }
-
     }
 
     private FixedUpdate() {
@@ -119,27 +128,24 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                     }
                     break;
             }
+            // 매 포인트 마다 동기화?
             if (this.isMasterClient && !this.isEnd) {
                 // this.SendPoint();
-                // 매 포인트 마다 동기화?
             }
             if (!this.isEnd) {
                 this.EndCheck();
             }
         }
         if (!this.isEnd) {
-            this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed * 0.1);
+            this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed);
         }
     }
 
     private SyncInit() {
         this.multiplay.RoomJoined += (room: Room) => {
             this.room = room;
+            
             this.room.Send("CheckMaster");
-            this.room.Send("RequestPosition", this.Id);
-            
-            this.ReceiveRequest = true;
-            
             this.room.AddMessageHandler("CheckMaster", (MasterClientSessionId) => {
                 if (this.room.SessionId == MasterClientSessionId) {
                     //처음 마스터가 되면
@@ -150,6 +156,9 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                 } else {
                 }
             });
+
+            this.room.Send("RequestPosition", this.Id);
+            this.RequestTime = Number(+new Date());
             const RequestId:string = "RequestPosition" + this.Id;
             this.room.AddMessageHandler(RequestId, (message) => {
                 if (this.isMasterClient) {
@@ -157,7 +166,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                 }
             });
 
-            const syncId: string = "SyncTweenOptimization" + this.Id;
+            const syncId: string = "ResponsePosition" + this.Id;
             this.room.AddMessageHandler(syncId, (message: inforTween) => {
                 if (!this.isMasterClient && this.ReceiveRequest) {
                     this.ReceiveRequest = false
@@ -169,57 +178,25 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                     let dir = Vector3.Normalize(this.TweenPosition[this.nextIndex] - getPos);
 
                     let curClientTimeStamp = +new Date();
-                    console.log(Number(curClientTimeStamp));
-                    let DiffTime = (Number(curClientTimeStamp) - Number(message.masterTimeStemp)) / 1000;
-                    console.log(DiffTime);
-                    let Fps = 0.1 / Time.fixedDeltaTime;
-                    console.log(Fps);
-                    let DiffPos = dir * DiffTime * this.moveSpeed * Fps;
-                    let pos = getPos + DiffPos;
+                    
+                    //let DiffTime = (Number(curClientTimeStamp) - Number(message.masterTimeStemp)) / 1000;
+                    //Requset후 Response 받은 시간 / 2 
+                    let DiffTime = (Number(curClientTimeStamp) - Number(this.RequestTime)) / 2000;
+                    console.log("DiffTime:"+DiffTime);
+                    let FPS = 1 / Time.fixedDeltaTime; // 유니티 기본 FixedUpdate: 0.02/sec, FPS : 50
+                    
+                    let DiffPos = dir * DiffTime * this.moveSpeed * FPS;
+                    let InterpolationPos = getPos + DiffPos;
 
                     //받은 위치
-                    console.log(getPos.x);
-
+                    console.log("get:"+getPos.x);
                     //보간된 위치
-                    console.log(pos.x);
-                    console.log("@@@@");
+                    console.log("Interpolation:"+InterpolationPos.x);
 
-                    //this.transform.position = getPos;
-                    this.transform.position = pos;
+                    this.transform.position = InterpolationPos;
                 }
             });
 
-            //처음 동기화에 포지션과 방장의 타임스탬프를 같이 받고 Diff(딜레이) = 방장의 타임스탬프 - 내 타임스탬프, 시작할 포지션 = 받은 포지션 + 진행방향 * Diff(초) 
-            /*this.room.AddMessageHandler("ServerTimestamp", (message: PlayerTimestamp) => {
-                console.log("@@####");
-                let timestampInfo: PlayerTimestamp = {
-                    gameStartTimestamp: message.gameStartTimestamp,
-                    playerJoinTimestamp: message.playerJoinTimestamp
-                };
-                // Cache the server's game start time. 
-                this.gameStartTimestampFromServer = Number(timestampInfo.gameStartTimestamp);
-
-                console.log(this.gameStartTimestampFromServer);
-                // Catche the player join time from the server. 
-                let playerJoinTimestampFromServer = Number(timestampInfo.playerJoinTimestamp);
-                console.log(playerJoinTimestampFromServer);
-
-                // Current client time. 
-                let curClientTimeStamp = +new Date();
-
-                // Save the difference between the server timestamp and the client timestamp. 
-                // - For applying the difference after returning from the background. 
-                let diff: number = curClientTimeStamp - playerJoinTimestampFromServer;
-                this.diffTimestamp = diff; // save the time difference. 
-                console.log(this.diffTimestamp);
-                // Elapsed time since game start. 
-                let elapsedTime = playerJoinTimestampFromServer - this.gameStartTimestampFromServer;
-                console.log(elapsedTime);
-                // Convert to seconds for block movement calculation. 
-                let timestampSecond = elapsedTime / 1000;
-                console.log(timestampSecond);
-                console.log("@@@@@@");
-            });*/
         }
     }
 
@@ -230,26 +207,21 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
             }
         }
     }
-
-    public ResetTween() {
-        this.transform.position = this.TweenPosition[0];
-        this.nowIndex = 0;
-        this.nextIndex = 1;
-        this.loopCountDouble = 0;
-        this.isEnd = false;
-    }
-
-
-    //방장이 퍼즈하면?
+    
     private bPaused: boolean;
     private OnApplicationPause(pause: boolean) {
         if (pause) {
             this.bPaused = true;
+            //방장이 퍼즈하면? => 방장 넘겨주기
+            if(this.isMasterClient)
+                this.room.Send("PauseMaster");
         } else {
             if (this.bPaused) {
                 this.bPaused = false;
-                this.ReceiveRequest = true;
+
                 this.room.Send("RequestPosition", this.Id);
+                this.ReceiveRequest = true;
+                this.RequestTime = Number(+new Date());
             }
         }
     }
@@ -267,12 +239,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
         data.Add("nextIndex", this.nextIndex);
         data.Add("loopCount", this.loopCountDouble);
 
-        let curClientTimeStamp = +new Date();
-        data.Add("masterTimeStemp", curClientTimeStamp);
-
         this.room.Send("SyncTweenOptimization", data.GetObject());
-        
-        console.log("Master=>"+this.transform.position.x);
     }
 
 

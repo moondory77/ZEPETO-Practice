@@ -17,8 +17,7 @@ interface inforTweenOptimization{
     Id: string,
     position: Vector3,
     nextIndex : number,
-    loopCount:number,
-    masterTimeStemp:number
+    loopCount:number
 }
 
 
@@ -64,16 +63,17 @@ export default class extends Sandbox {
                 Id :message.Id,
                 position :message.position,
                 nextIndex : message.nextIndex,
-                loopCount :message.loopCount,
-                masterTimeStemp :message.masterTimeStemp
+                loopCount :message.loopCount
             };
-            console.log(message.position);
-            this.broadcast("SyncTweenOptimization"+message.Id, syncTween);
+            setTimeout(()=> {
+                this.broadcast("ResponsePosition" + message.Id, syncTween);
+            },1000);
         });
         
         this.onMessage("RequestPosition", (client, message:string) => {
-            this.broadcast("RequestPosition"+message,"");
-            console.log("RequestPosition"+message);
+            setTimeout(()=> {
+                this.broadcast("RequestPosition" + message, "");
+            },1000);
         });
 
         this.onMessage("CheckMaster", (client, message) => {
@@ -83,7 +83,15 @@ export default class extends Sandbox {
             }
             this.broadcast("CheckMaster", this.masterClientSessionId);
         });
-        
+        this.onMessage("PauseMaster",(client)=>{
+            this.sessionIdQueue.splice((this.sessionIdQueue.indexOf(client.sessionId)),1)
+            this.sessionIdQueue.push(client.sessionId.toString());
+            if(this.masterClientSessionId != this.sessionIdQueue[0]) {
+                this.masterClientSessionId = this.sessionIdQueue[0];
+                this.broadcast("CheckMaster", this.masterClientSessionId);
+                console.log("master->", this.masterClientSessionId)
+            }
+        })
     }
 
     onJoin(client: SandboxPlayer) {
