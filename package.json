@@ -1,25 +1,24 @@
 {
-  "name": "ZEPETO-GUIDE-Gesture",
-  "version": "1.0.0",
-  "description": "제페토 월드 제스쳐 사용 가이드",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kim-JeongUng/ZEPETO-GUIDE-Gesture.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Kim-JeongUng/ZEPETO-GUIDE-Gesture/issues"
-  },
-  "homepage": "https://github.com/Kim-JeongUng/ZEPETO-GUIDE-Gesture#readme",
-  "dependencies": {
-    "@zepeto/sandbox": "file:Library/Packages/zepeto-sandbox.tgz",
-    "typescript": "^4.3.5",
-    "zepeto-script-compiler": "file:Library/Packages/zepeto-script-compiler.tgz"
-  }
+	"name": "ZEPETO-GUIDE-Gesture",
+	"version": "1.0.0",
+	"description": "제페토 월드 제스쳐 사용 가이드",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Kim-JeongUng/ZEPETO-GUIDE-Gesture.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Kim-JeongUng/ZEPETO-GUIDE-Gesture/issues"
+	},
+	"homepage": "https://github.com/Kim-JeongUng/ZEPETO-GUIDE-Gesture#readme",
+	"dependencies": {
+		"typescript": "^4.3.5",
+		"zepeto-script-compiler": "file:Library/Packages/zepeto-script-compiler.tgz"
+	}
 }
