@@ -25,8 +25,7 @@ interface inforTweenOptimization{
 export default class extends Sandbox {
     private sessionIdQueue: string[] = [];
     private masterClientSessionId: string;
-
-    
+    private masterClient = () =>this.loadPlayer(this.masterClientSessionId);
 
     onCreate(options: SandboxOptions) {
         this.onMessage("echo", (client, message) => {
@@ -61,8 +60,8 @@ export default class extends Sandbox {
 
         this.onMessage("RequestPosition", (client, message:string) => {
             //this.broadcast("RequestPosition" + message, "");
-            setTimeout(()=> {
-                this.broadcast("RequestPosition" + message, "");
+            setTimeout(()=> {            
+                this.masterClient().send("RequestPosition" + message, "");
             },1000);
         });
 
@@ -76,7 +75,7 @@ export default class extends Sandbox {
             };
             //this.broadcast("ResponsePosition" + message.Id, syncTween);
             setTimeout(()=> {
-                this.broadcast("ResponsePosition" + message.Id, syncTween);
+                this.broadcast("ResponsePosition" + message.Id, syncTween,{except:this.masterClient()});
             },1000);
         });
         
@@ -92,7 +91,8 @@ export default class extends Sandbox {
             }
             this.broadcast("CheckMaster", this.masterClientSessionId);
         });
-        this.onMessage("PauseMaster",(client)=>{
+        
+        this.onMessage("PausePlayer",(client)=>{
             this.sessionIdQueue.splice((this.sessionIdQueue.indexOf(client.sessionId)),1)
             this.sessionIdQueue.push(client.sessionId.toString());
             if(this.masterClientSessionId != this.sessionIdQueue[0]) {

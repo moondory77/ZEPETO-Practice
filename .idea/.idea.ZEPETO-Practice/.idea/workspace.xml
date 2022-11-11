@@ -2,45 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d956d066-4304-42be-90ff-664a2c36de94" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ObjectSync.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ObjectSync.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.bin/acorn" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/acorn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.bin/zepeto-sandbox" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/zepeto-sandbox" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/bootstrap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/bootstrap.jsc" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/bootstrap.jsc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/cli.jsc" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/cli.jsc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/bytenode/cli.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/bytenode/cli.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/contextify.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/contextify.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/fixasync.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/fixasync.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/read.sh" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/read.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/sandbox.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/dist/sandbox.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/.vscode/launch.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/SchemaTypes/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/SchemaTypes/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/schemas.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/schemas.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@zepeto/sandbox/template/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/bin/acorn" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/bin/acorn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.mjs.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/acorn.mjs.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/dist/bin.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/dist/bin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/acorn/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/acorn/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +41,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1668132797054</updated>
-      <workItem from="1668132803652" duration="8309000" />
+      <workItem from="1668132803652" duration="10697000" />
     </task>
     <servers />
   </component>
