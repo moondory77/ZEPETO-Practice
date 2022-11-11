@@ -17,7 +17,8 @@ interface inforTweenOptimization{
     Id: string,
     position: Vector3,
     nextIndex : number,
-    loopCount:number
+    loopCount:number,
+    masterTimeStamp:number,
 }
 
 
@@ -57,25 +58,33 @@ export default class extends Sandbox {
             };
             this.broadcast("SyncTween"+message.Id, syncTween);
         });
-        
-        this.onMessage("SyncTweenOptimization", (client, message:inforTweenOptimization) => {
-            let syncTween:inforTweenOptimization = {
-                Id :message.Id,
-                position :message.position,
-                nextIndex : message.nextIndex,
-                loopCount :message.loopCount
-            };
-            setTimeout(()=> {
-                this.broadcast("ResponsePosition" + message.Id, syncTween);
-            },1000);
-        });
-        
+
         this.onMessage("RequestPosition", (client, message:string) => {
+            //this.broadcast("RequestPosition" + message, "");
             setTimeout(()=> {
                 this.broadcast("RequestPosition" + message, "");
             },1000);
         });
 
+        this.onMessage("SyncTweenOptimization", (client, message:inforTweenOptimization) => {
+            let syncTween:inforTweenOptimization = {
+                Id :message.Id,
+                position :message.position,
+                nextIndex : message.nextIndex,
+                loopCount :message.loopCount,
+                masterTimeStamp :message.masterTimeStamp,
+            };
+            //this.broadcast("ResponsePosition" + message.Id, syncTween);
+            setTimeout(()=> {
+                this.broadcast("ResponsePosition" + message.Id, syncTween);
+            },1000);
+        });
+        
+        this.onMessage("CheckServerTimeRequest", (client, message) => {
+            let Timestamp = + new Date();
+            client.send("CheckServerTimeResponse", Timestamp);
+        });
+        
         this.onMessage("CheckMaster", (client, message) => {
             if(this.masterClientSessionId != this.sessionIdQueue[0]) {
                 this.masterClientSessionId = this.sessionIdQueue[0];

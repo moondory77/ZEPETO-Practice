@@ -18,6 +18,7 @@
 	},
 	"homepage": "https://github.com/Kim-JeongUng/ZEPETO-GUIDE-Gesture#readme",
 	"dependencies": {
+		"@zepeto/sandbox": "file:Library/Packages/zepeto-sandbox.tgz",
 		"typescript": "^4.3.5",
 		"zepeto-script-compiler": "file:Library/Packages/zepeto-script-compiler.tgz"
 	}

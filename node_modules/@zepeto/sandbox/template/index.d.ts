@@ -751,9 +751,8 @@ declare module "ZEPETO.Multiplay" {
         readonly patchRate: number;
         readonly autoDispose: boolean;
         readonly state: State;
-        readonly clients: SandboxPlayer[];
+        readonly clients: IterableIterator<SandboxPlayer>;
         readonly allowReconnectionTime: number;
-        readonly matchMakeOption: string;
         readonly private: boolean;
         abstract onCreate?(options: SandboxOptions): void | Promise<void>;
         abstract onJoin?(client: SandboxPlayer): void | Promise<void>;

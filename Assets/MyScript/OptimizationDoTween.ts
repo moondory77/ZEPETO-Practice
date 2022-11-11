@@ -30,7 +30,8 @@ interface inforTween {
     Id: string,
     position: Vector3,
     nextIndex: number,
-    loopCount: number
+    loopCount: number,
+    masterTimeStamp :number,
 }
 
 interface PlayerTimestamp {
@@ -47,9 +48,6 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
     @SerializeField() private TweenPosition: Vector3[];
     @SerializeField() private moveSpeed: number = 0.1;
 
-    private gameStartTimestampFromServer: number = 0;
-    private diffTimestamp: number = 0;
-
     private multiplay: ZepetoWorldMultiplay;
     private room: Room;
     private Id: string = "";
@@ -63,7 +61,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
     private isEnd: boolean;
     
     private ReceiveRequest: boolean;
-    private RequestTime :number;
+    private diffTime :number;
 
     private Init() {
         this.transform.position = this.TweenPosition[0];
@@ -95,39 +93,8 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
     private FixedUpdate() {
         if (this.transform.position == this.TweenPosition[this.nextIndex]) {
             this.nowIndex = this.nextIndex;
-
-            switch (+this.tweenType) {
-                case TweenType.Circulation:
-                    if (this.nowIndex == this.TweenPosition.length - 1) {
-                        this.nextIndex = 0;
-                        this.loopCountDouble++;
-                    } else if (this.nowIndex == 0) {
-                        this.nextIndex++;
-                        this.loopCountDouble++;
-                    } else
-                        this.nextIndex++;
-                    break;
-                case TweenType.Linear:
-                    if (this.nowIndex == this.TweenPosition.length - 1) {
-                        this.loopCountDouble++;
-                    } else if (this.nowIndex == 0) {
-                        this.loopCountDouble++;
-                    }
-                    this.nextIndex = this.loopCountDouble % 2 == 0 ? this.nowIndex + 1 : this.nowIndex - 1;
-                    break;
-                case TweenType.TeleportFirstPoint:
-                    if (this.nowIndex == this.TweenPosition.length - 1) {
-                        if (this.loopType != LoopType.JustOneWay) {
-                            this.transform.position = this.TweenPosition[0];
-                            this.loopCountDouble++;
-                        }
-                        this.nextIndex = 1;
-                        this.loopCountDouble++;
-                    } else {
-                        this.nextIndex++;
-                    }
-                    break;
-            }
+            this.GetNextIndex();
+            
             // 매 포인트 마다 동기화?
             if (this.isMasterClient && !this.isEnd) {
                 // this.SendPoint();
@@ -140,10 +107,56 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
             this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed);
         }
     }
-
+    
+    private GetNextIndex(){
+        switch (+this.tweenType) {
+            case TweenType.Circulation:
+                if (this.nowIndex == this.TweenPosition.length - 1) {
+                    this.nextIndex = 0;
+                    this.loopCountDouble++;
+                } else if (this.nowIndex == 0) {
+                    this.nextIndex++;
+                    this.loopCountDouble++;
+                } else
+                    this.nextIndex++;
+                break;
+            case TweenType.Linear:
+                if (this.nowIndex == this.TweenPosition.length - 1) {
+                    this.loopCountDouble++;
+                } else if (this.nowIndex == 0) {
+                    this.loopCountDouble++;
+                }
+                this.nextIndex = this.loopCountDouble % 2 == 0 ? this.nowIndex + 1 : this.nowIndex - 1;
+                break;
+            case TweenType.TeleportFirstPoint:
+                if (this.nowIndex == this.TweenPosition.length - 1) {
+                    if (this.loopType != LoopType.JustOneWay) {
+                        this.transform.position = this.TweenPosition[0];
+                        this.loopCountDouble++;
+                    }
+                    this.nextIndex = 1;
+                    this.loopCountDouble++;
+                } else {
+                    this.nextIndex++;
+                }
+                break;
+        }
+    }
+    
     private SyncInit() {
         this.multiplay.RoomJoined += (room: Room) => {
             this.room = room;
+            
+            this.room.Send("CheckServerTimeRequest");
+            
+            let Time1 = Number(+new Date());
+            this.room.AddMessageHandler("CheckServerTimeResponse", (message:number) =>
+            {
+                let Time2 =  Number(+new Date());
+                let latency = (Time2 - Time1)/2
+                this.diffTime = Number(message)-Time2 + latency;
+                this.room.Send("RequestPosition", this.Id);
+            });
             
             this.room.Send("CheckMaster");
             this.room.AddMessageHandler("CheckMaster", (MasterClientSessionId) => {
@@ -156,9 +169,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                 } else {
                 }
             });
-
-            this.room.Send("RequestPosition", this.Id);
-            this.RequestTime = Number(+new Date());
+            
             const RequestId:string = "RequestPosition" + this.Id;
             this.room.AddMessageHandler(RequestId, (message) => {
                 if (this.isMasterClient) {
@@ -173,15 +184,9 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
                     this.nextIndex = message.nextIndex;
                     this.loopCountDouble = message.loopCount;
                     this.EndCheck();
-
                     let getPos = this.ParseVector3(message.position);
                     let dir = Vector3.Normalize(this.TweenPosition[this.nextIndex] - getPos);
-
-                    let curClientTimeStamp = +new Date();
-                    
-                    //let DiffTime = (Number(curClientTimeStamp) - Number(message.masterTimeStemp)) / 1000;
-                    //Requset후 Response 받은 시간 / 2 
-                    let DiffTime = (Number(curClientTimeStamp) - Number(this.RequestTime)) / 2000;
+                    let DiffTime = (this.GetServerTime() - Number(message.masterTimeStamp)) / 1000;
                     console.log("DiffTime:"+DiffTime);
                     let FPS = 1 / Time.fixedDeltaTime; // 유니티 기본 FixedUpdate: 0.02/sec, FPS : 50
                     
@@ -213,18 +218,20 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
         if (pause) {
             this.bPaused = true;
             //방장이 퍼즈하면? => 방장 넘겨주기
-            if(this.isMasterClient)
+            if(this.isMasterClient) {
                 this.room.Send("PauseMaster");
+                this.isMasterClient = false;
+            }
         } else {
             if (this.bPaused) {
                 this.bPaused = false;
 
                 this.room.Send("RequestPosition", this.Id);
                 this.ReceiveRequest = true;
-                this.RequestTime = Number(+new Date());
             }
         }
     }
+    private GetServerTime = () => this.diffTime + Number(+new Date());
 
     private SendPoint() {
         const data = new RoomData();
@@ -238,6 +245,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
 
         data.Add("nextIndex", this.nextIndex);
         data.Add("loopCount", this.loopCountDouble);
+        data.Add("masterTimeStamp", this.GetServerTime());
 
         this.room.Send("SyncTweenOptimization", data.GetObject());
     }
