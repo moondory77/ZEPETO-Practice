@@ -39,7 +39,7 @@ interface PlayerTimestamp {
     playerJoinTimestamp: number;
 }
 
-export default class OptimizationDoTween extends ZepetoScriptBehaviour {
+export default class InterpolationDOTween extends ZepetoScriptBehaviour {
 
     @SerializeField() private syncType: SyncType = SyncType.Sync;
     @SerializeField() private tweenType: TweenType = TweenType.Circulation;
@@ -73,7 +73,7 @@ export default class OptimizationDoTween extends ZepetoScriptBehaviour {
     
     private Awake() {
         if (this.TweenPosition.length < 2) {
-            throw 'Error: Enter at least two positions in the Twin Position.';
+            throw new Error('Error: Enter at least two positions in the Twin Position.');
             return;
         }
         this.Init();

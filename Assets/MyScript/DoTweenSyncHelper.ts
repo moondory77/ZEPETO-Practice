@@ -160,6 +160,20 @@ export default class DoTweenSyncHelper extends ZepetoScriptBehaviour {
         this.isEnd = false;
     }
     
+    private bPaused: boolean;
+    private OnApplicationPause(pause: boolean) {
+        if (pause) {
+            this.bPaused = true;
+            this.room.Send("PausePlayer");
+        } else {
+            if (this.bPaused) {
+                this.bPaused = false;
+
+                this.room.Send("RequestPosition", this.Id);
+            }
+        }
+    }
+    
     private SendPoint() {
         const data = new RoomData();
         data.Add("Id", this.Id);

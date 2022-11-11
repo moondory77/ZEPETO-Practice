@@ -55,14 +55,13 @@ export default class extends Sandbox {
                 nextIndex : message.nextIndex,
                 loopCount :message.loopCount
             };
-            this.broadcast("SyncTween"+message.Id, syncTween);
+            setTimeout(()=> {
+                this.broadcast("SyncTween"+message.Id, syncTween);
+            },1000);
         });
 
         this.onMessage("RequestPosition", (client, message:string) => {
-            //this.broadcast("RequestPosition" + message, "");
-            setTimeout(()=> {            
-                this.masterClient().send("RequestPosition" + message, "");
-            },1000);
+            this.broadcast("RequestPosition" + message, "");
         });
 
         this.onMessage("SyncTweenOptimization", (client, message:inforTweenOptimization) => {
