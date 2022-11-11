@@ -85,10 +85,10 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         this.Id = SyncIndexManager.SyncIndex.toString();
 
         if (this.syncType == SyncType.Sync) {
+            this.multiplay = multiplaySample.instance.multiplay;
             this.multiplay.RoomJoined += (room: Room) => {
                 console.log("@@@@");
                 this.room = room;
-                this.multiplay = multiplaySample.instance.multiplay;
                 this.SyncInit();
             };
         }
