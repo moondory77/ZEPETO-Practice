@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d956d066-4304-42be-90ff-664a2c36de94" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/DoTweenSyncHelper.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/OptimizationDoTween.ts.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ObjectSync.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ObjectSync.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
     </list>
@@ -43,7 +41,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1668132797054</updated>
-      <workItem from="1668132803652" duration="13515000" />
+      <workItem from="1668132803652" duration="17407000" />
     </task>
     <servers />
   </component>

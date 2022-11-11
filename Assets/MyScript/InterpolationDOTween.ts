@@ -31,7 +31,7 @@ interface inforTween {
     position: Vector3,
     nextIndex: number,
     loopCount: number,
-    masterTimeStamp :number,
+    masterTimeStamp: number,
 }
 
 interface PlayerTimestamp {
@@ -44,9 +44,10 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
     @SerializeField() private syncType: SyncType = SyncType.Sync;
     @SerializeField() private tweenType: TweenType = TweenType.Circulation;
     @SerializeField() private loopType: LoopType = LoopType.Repeat;
+    @SerializeField() private SyncInterpolation: boolean = true;
     @SerializeField() private TweenPosition: Vector3[];
     @SerializeField() private moveSpeed: number = 0.1;
-    
+
     private Id: string = "";
 
     private multiplay: ZepetoWorldMultiplay;
@@ -57,9 +58,9 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
 
     private loopCountDouble: number;    // 끝 지점 도달당 1씩 카운트, 즉 1번 순회 => loopCountDouble 2, 
     private isEnd: boolean;
-    
+
     private Requesting: boolean;
-    private diffTime :number;
+    private diffTime: number;
 
     private Init() {
         this.transform.position = this.TweenPosition[0];
@@ -70,7 +71,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         this.Requesting = true;
         this.diffTime = 0;
     }
-    
+
     private Awake() {
         if (this.TweenPosition.length < 2) {
             throw new Error('Error: Enter at least two positions in the Twin Position.');
@@ -82,9 +83,14 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
     private Start() {
         SyncIndexManager.SyncIndex++;
         this.Id = SyncIndexManager.SyncIndex.toString();
+
         if (this.syncType == SyncType.Sync) {
-            this.multiplay = multiplaySample.instance.multiplay;
-            this.SyncInit();
+            this.multiplay.RoomJoined += (room: Room) => {
+                console.log("@@@@");
+                this.room = room;
+                this.multiplay = multiplaySample.instance.multiplay;
+                this.SyncInit();
+            };
         }
     }
 
@@ -92,7 +98,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         if (this.transform.position == this.TweenPosition[this.nextIndex]) {
             this.nowIndex = this.nextIndex;
             this.GetNextIndex();
-            
+
             if (!this.isEnd) {
                 this.EndCheck();
             }
@@ -101,8 +107,8 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             this.transform.position = Vector3.MoveTowards(this.transform.position, this.TweenPosition[this.nextIndex], this.moveSpeed);
         }
     }
-    
-    private GetNextIndex(){
+
+    private GetNextIndex() {
         switch (+this.tweenType) {
             case TweenType.Circulation:
                 if (this.nowIndex == this.TweenPosition.length - 1) {
@@ -136,51 +142,50 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
                 break;
         }
     }
-    
+
     private SyncInit() {
-        this.multiplay.RoomJoined += (room: Room) => {
-            this.room = room;
-            this.room.Send("CheckServerTimeRequest");
-            
-            let Time1 = Number(+new Date());
-            this.room.AddMessageHandler("CheckServerTimeResponse", (message:number) =>
-            {
-                let Time2 =  Number(+new Date());
-                let latency = (Time2 - Time1)/2
-                this.diffTime = Number(message)-Time2 + latency;
-                this.room.Send("RequestPosition", this.Id);
-            });
-            
-            const RequestId:string = "RequestPosition" + this.Id;
-            this.room.AddMessageHandler(RequestId, (message) => {
-                this.SendPoint();
-            });
+        this.room.Send("CheckServerTimeRequest");
 
-            const ResponseId: string = "ResponsePosition" + this.Id;
-            this.room.AddMessageHandler(ResponseId, (message: inforTween) => {
-                if (this.Requesting) {
-                    this.Requesting = false
-                    this.nextIndex = message.nextIndex;
-                    this.loopCountDouble = message.loopCount;
-                    this.EndCheck();
-                    
-                    let getPos = this.ParseVector3(message.position);
-                    let dir = Vector3.Normalize(this.TweenPosition[this.nextIndex] - getPos);
-                    let DiffTime = (this.GetServerTime() - Number(message.masterTimeStamp)) / 1000;
-                    console.log("DiffTime:"+DiffTime);
-                    if(DiffTime<0){
-                        console.log("@@@@@ERROR DiffTime"+DiffTime);
-                    }
-                    
-                    let FPS = 1 / Time.fixedDeltaTime; // 유니티 기본 FixedUpdate: 0.02/sec, FPS : 50
-                    let DiffPos = dir * DiffTime * this.moveSpeed * FPS;
-                    let InterpolationPos = getPos + DiffPos;
+        let Time1 = Number(+new Date());
+        this.room.AddMessageHandler("CheckServerTimeResponse", (message: number) => {
+            let Time2 = Number(+new Date());
+            let latency = (Time2 - Time1) / 2
+            this.diffTime = Number(message) - Time2 + latency;
+            console.log("NewJoin!");
+            console.log(this.room.SessionId + "@@@@@" + this.diffTime);
+            this.room.Send("RequestPosition", this.Id);
+        });
 
-                    this.transform.position = InterpolationPos;
+        const RequestId: string = "RequestPosition" + this.Id;
+        this.room.AddMessageHandler(RequestId, (message) => {
+            this.SendPoint();
+        });
+
+        const ResponseId: string = "ResponsePosition" + this.Id;
+        this.room.AddMessageHandler(ResponseId, (message: inforTween) => {
+            if (this.Requesting) {
+                this.Requesting = false
+                this.nextIndex = message.nextIndex;
+                this.loopCountDouble = message.loopCount;
+                this.EndCheck();
+
+                let getPos = this.ParseVector3(message.position);
+                let dir = Vector3.Normalize(this.TweenPosition[this.nextIndex] - getPos);
+                let latency = (this.GetServerTime() - Number(message.masterTimeStamp)) / 1000;
+                if (latency < 0) {
+                    console.log("@@@@@ERROR DiffTime" + latency);
                 }
-            });
 
-        }
+                let FPS = 1 / Time.fixedDeltaTime; // 유니티 기본 FixedUpdate: 0.02/sec, FPS : 50
+                let DiffPos = dir * latency * this.moveSpeed * FPS;
+                let InterpolationPos = getPos + DiffPos;
+
+                if (!this.SyncInterpolation) {
+                    this.transform.position = getPos;
+                } else
+                    this.transform.position = InterpolationPos;
+            }
+        });
     }
 
     private EndCheck() {
@@ -190,8 +195,9 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             }
         }
     }
-    
+
     private bPaused: boolean;
+
     private OnApplicationPause(pause: boolean) {
         if (pause) {
             this.bPaused = true;
@@ -205,6 +211,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             }
         }
     }
+
     private GetServerTime = () => this.diffTime + Number(+new Date());
 
     private SendPoint() {

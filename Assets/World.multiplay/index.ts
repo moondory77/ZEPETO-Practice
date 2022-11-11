@@ -55,9 +55,7 @@ export default class extends Sandbox {
                 nextIndex : message.nextIndex,
                 loopCount :message.loopCount
             };
-            setTimeout(()=> {
-                this.broadcast("SyncTween"+message.Id, syncTween);
-            },1000);
+            this.broadcast("SyncTween"+message.Id, syncTween);
         });
 
         this.onMessage("RequestPosition", (client, message:string) => {
@@ -72,10 +70,10 @@ export default class extends Sandbox {
                 loopCount :message.loopCount,
                 masterTimeStamp :message.masterTimeStamp,
             };
-            //this.broadcast("ResponsePosition" + message.Id, syncTween);
-            setTimeout(()=> {
+            this.broadcast("ResponsePosition" + message.Id, syncTween,{except:this.masterClient()});
+            /*setTimeout(()=> {
                 this.broadcast("ResponsePosition" + message.Id, syncTween,{except:this.masterClient()});
-            },1000);
+            },1000);*/
         });
         
         this.onMessage("CheckServerTimeRequest", (client, message) => {
