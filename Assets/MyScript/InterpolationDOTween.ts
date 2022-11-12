@@ -72,22 +72,19 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         this.diffTime = 0;
     }
 
-    private Awake() {
+    private Start() {
         if (this.TweenPosition.length < 2) {
             throw new Error('Error: Enter at least two positions in the Twin Position.');
             return;
         }
         this.Init();
-    }
-
-    private Start() {
+        
         SyncIndexManager.SyncIndex++;
         this.Id = SyncIndexManager.SyncIndex.toString();
 
         if (this.syncType == SyncType.Sync) {
             this.multiplay = multiplaySample.instance.multiplay;
             this.multiplay.RoomJoined += (room: Room) => {
-                console.log("@@@@");
                 this.room = room;
                 this.SyncInit();
             };
@@ -164,7 +161,6 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         const ResponseId: string = "ResponsePosition" + this.Id;
         this.room.AddMessageHandler(ResponseId, (message: inforTween) => {
             if (this.Requesting) {
-                this.Requesting = false
                 this.nextIndex = message.nextIndex;
                 this.loopCountDouble = message.loopCount;
                 this.EndCheck();
@@ -172,18 +168,29 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
                 let getPos = this.ParseVector3(message.position);
                 let dir = Vector3.Normalize(this.TweenPosition[this.nextIndex] - getPos);
                 let latency = (this.GetServerTime() - Number(message.masterTimeStamp)) / 1000;
-                if (latency < 0) {
-                    console.log("@@@@@ERROR DiffTime" + latency);
-                }
-
                 let FPS = 1 / Time.fixedDeltaTime; // 유니티 기본 FixedUpdate: 0.02/sec, FPS : 50
+                
                 let DiffPos = dir * latency * this.moveSpeed * FPS;
                 let InterpolationPos = getPos + DiffPos;
 
-                if (!this.SyncInterpolation) {
-                    this.transform.position = getPos;
-                } else
-                    this.transform.position = InterpolationPos;
+                let MoveSize = Vector3.Magnitude(this.TweenPosition[this.nextIndex] - getPos);
+                let InterpolationPosSize = Vector3.Magnitude(InterpolationPos-getPos);
+                
+                // 허용범위 초과시 다시 포지션 Request
+                if(InterpolationPosSize>MoveSize){
+                    console.log("ERROR!");
+                    console.log("MoveSize:"+MoveSize);
+                    console.log("I:"+InterpolationPosSize);
+                    //위치 재 확인
+                    this.room.Send("RequestPosition", this.Id);
+                }
+                else {
+                    this.Requesting = false;
+                    if (!this.SyncInterpolation) {
+                        this.transform.position = getPos;
+                    } else
+                        this.transform.position = InterpolationPos;
+                }
             }
         });
     }

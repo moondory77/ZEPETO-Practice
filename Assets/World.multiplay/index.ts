@@ -70,10 +70,10 @@ export default class extends Sandbox {
                 loopCount :message.loopCount,
                 masterTimeStamp :message.masterTimeStamp,
             };
-            this.broadcast("ResponsePosition" + message.Id, syncTween,{except:this.masterClient()});
-            /*setTimeout(()=> {
+            //this.broadcast("ResponsePosition" + message.Id, syncTween,{except:this.masterClient()});
+            setTimeout(()=> {
                 this.broadcast("ResponsePosition" + message.Id, syncTween,{except:this.masterClient()});
-            },1000);*/
+            },1000);
         });
         
         this.onMessage("CheckServerTimeRequest", (client, message) => {
