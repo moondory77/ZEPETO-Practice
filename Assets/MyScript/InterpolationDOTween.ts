@@ -60,6 +60,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
     private isEnd: boolean;
 
     private Requesting: boolean;
+    private RequestTime: number;
     private diffTime: number;
 
     private Init() {
@@ -68,8 +69,8 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         this.nextIndex = 1;
         this.loopCountDouble = 0;
         this.isEnd = false;
-        this.Requesting = true;
         this.diffTime = 0;
+        this.Requesting = true;
     }
 
     private Start() {
@@ -85,6 +86,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         if (this.syncType == SyncType.Sync) {
             this.multiplay = multiplaySample.instance.multiplay;
             this.multiplay.RoomJoined += (room: Room) => {
+                this.Init();
                 this.room = room;
                 this.SyncInit();
             };
@@ -142,14 +144,12 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
 
     private SyncInit() {
         this.room.Send("CheckServerTimeRequest");
-
-        let Time1 = Number(+new Date());
+        this.RequestTime = Number(+new Date());
+        
         this.room.AddMessageHandler("CheckServerTimeResponse", (message: number) => {
-            let Time2 = Number(+new Date());
-            let latency = (Time2 - Time1) / 2
-            this.diffTime = Number(message) - Time2 + latency;
-            console.log("NewJoin!");
-            console.log(this.room.SessionId + "@@@@@" + this.diffTime);
+            let ResponseTime = Number(+new Date());
+            let latency = (ResponseTime - this.RequestTime) / 2
+            this.diffTime = Number(message) - ResponseTime + latency;
             this.room.Send("RequestPosition", this.Id);
         });
 
@@ -161,30 +161,29 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         const ResponseId: string = "ResponsePosition" + this.Id;
         this.room.AddMessageHandler(ResponseId, (message: inforTween) => {
             if (this.Requesting) {
-                this.nextIndex = message.nextIndex;
-                this.loopCountDouble = message.loopCount;
-                this.EndCheck();
-
+                let TmpNextIndex = message.nextIndex;
                 let getPos = this.ParseVector3(message.position);
-                let dir = Vector3.Normalize(this.TweenPosition[this.nextIndex] - getPos);
+                let dir = Vector3.Normalize(this.TweenPosition[TmpNextIndex] - getPos);
                 let latency = (this.GetServerTime() - Number(message.masterTimeStamp)) / 1000;
                 let FPS = 1 / Time.fixedDeltaTime; // 유니티 기본 FixedUpdate: 0.02/sec, FPS : 50
                 
                 let DiffPos = dir * latency * this.moveSpeed * FPS;
                 let InterpolationPos = getPos + DiffPos;
-
-                let MoveSize = Vector3.Magnitude(this.TweenPosition[this.nextIndex] - getPos);
-                let InterpolationPosSize = Vector3.Magnitude(InterpolationPos-getPos);
                 
+                let MoveSize = Vector3.SqrMagnitude(this.TweenPosition[TmpNextIndex] - getPos);
+                let InterpolationPosSize = Vector3.SqrMagnitude(InterpolationPos-getPos);
+                console.log("latency="+latency);
                 // 허용범위 초과시 다시 포지션 Request
-                if(InterpolationPosSize>MoveSize){
-                    console.log("ERROR!");
-                    console.log("MoveSize:"+MoveSize);
-                    console.log("I:"+InterpolationPosSize);
+                if(InterpolationPosSize>=MoveSize || latency<0){
+                    console.log("Re Request....");
                     //위치 재 확인
-                    this.room.Send("RequestPosition", this.Id);
+                    this.room.Send("CheckServerTimeRequest");
+                    this.RequestTime = Number(+new Date());
                 }
                 else {
+                    this.nextIndex = message.nextIndex;
+                    this.loopCountDouble = message.loopCount;
+                    this.EndCheck();
                     this.Requesting = false;
                     if (!this.SyncInterpolation) {
                         this.transform.position = getPos;
@@ -213,7 +212,9 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             if (this.bPaused) {
                 this.bPaused = false;
 
-                this.room.Send("RequestPosition", this.Id);
+                this.room.Send("CheckServerTimeRequest");                    
+                this.RequestTime = Number(+new Date());
+
                 this.Requesting = true;
             }
         }

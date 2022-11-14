@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 62987126}
   - component: {fileID: 62987125}
   m_Layer: 0
-  m_Name: SyncCube
+  m_Name: InterPolationCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -327,16 +327,18 @@ MonoBehaviour:
     - {fileID: 0}
     values:
     - '{"type":"System.Single, mscorlib","value":"0.1"}'
-    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":2,\"type\":\"UnityEngine.Vector3,
+    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":4,\"type\":\"UnityEngine.Vector3,
       UnityEngine.CoreModule\",\"isUnity\":false}"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"System.String, mscorlib","value":"1"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.Boolean, mscorlib","value":"True"}'
     unityArrayValues: []
     arrayValues:
     - '{"x":0.0,"y":2.0,"z":0.0}'
     - '{"x":10.0,"y":2.0,"z":0.0}'
+    - '{"x":10.0,"y":12.0,"z":0.0}'
+    - '{"x":0.0,"y":12.0,"z":0.0}'
     script: {fileID: 4458252877524076426, guid: d88e9733c90ff4c318c9bac952ae4cb5, type: 3}
     isExpaned: 0
 --- !u!65 &62987126
@@ -429,7 +431,7 @@ GameObject:
   - component: {fileID: 253002487}
   - component: {fileID: 253002486}
   m_Layer: 0
-  m_Name: InterpolationCube (2)
+  m_Name: SyncCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -464,16 +466,18 @@ MonoBehaviour:
     - {fileID: 0}
     values:
     - '{"type":"System.Single, mscorlib","value":"0.1"}'
-    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":2,\"type\":\"UnityEngine.Vector3,
+    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":4,\"type\":\"UnityEngine.Vector3,
       UnityEngine.CoreModule\",\"isUnity\":false}"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"System.String, mscorlib","value":"1"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.Boolean, mscorlib","value":"False"}'
     unityArrayValues: []
     arrayValues:
     - '{"x":0.0,"y":2.0,"z":0.0}'
     - '{"x":10.0,"y":2.0,"z":0.0}'
+    - '{"x":10.0,"y":12.0,"z":0.0}'
+    - '{"x":0.0,"y":12.0,"z":0.0}'
     script: {fileID: 4458252877524076426, guid: d88e9733c90ff4c318c9bac952ae4cb5, type: 3}
     isExpaned: 0
 --- !u!65 &253002487
@@ -596,7 +600,7 @@ GameObject:
   - component: {fileID: 564361694}
   - component: {fileID: 564361698}
   m_Layer: 0
-  m_Name: SyncCube
+  m_Name: InterPolationCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -707,16 +711,18 @@ MonoBehaviour:
     - {fileID: 0}
     values:
     - '{"type":"System.Single, mscorlib","value":"0.01"}'
-    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":2,\"type\":\"UnityEngine.Vector3,
+    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":4,\"type\":\"UnityEngine.Vector3,
       UnityEngine.CoreModule\",\"isUnity\":false}"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"System.String, mscorlib","value":"1"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.Boolean, mscorlib","value":"True"}'
     unityArrayValues: []
     arrayValues:
     - '{"x":0.0,"y":0.0,"z":0.0}'
     - '{"x":10.0,"y":0.0,"z":0.0}'
+    - '{"x":10.0,"y":10.0,"z":0.0}'
+    - '{"x":0.0,"y":10.0,"z":0.0}'
     script: {fileID: 4458252877524076426, guid: d88e9733c90ff4c318c9bac952ae4cb5, type: 3}
     isExpaned: 0
 --- !u!1 &764827637
@@ -935,7 +941,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 812918570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -13.67}
+  m_LocalPosition: {x: 0, y: 5.6, z: -13.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1104,7 +1110,7 @@ GameObject:
   - component: {fileID: 908468523}
   - component: {fileID: 908468522}
   m_Layer: 0
-  m_Name: InterpolationCube (1)
+  m_Name: SyncCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1139,16 +1145,18 @@ MonoBehaviour:
     - {fileID: 0}
     values:
     - '{"type":"System.Single, mscorlib","value":"0.01"}'
-    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":2,\"type\":\"UnityEngine.Vector3,
+    - '{"type":"ZEPETO.Script.ZepetoScriptSerializer+ArrayInfo, ZEPETO.Script","value":"{\"offset\":0,\"length\":4,\"type\":\"UnityEngine.Vector3,
       UnityEngine.CoreModule\",\"isUnity\":false}"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
-    - '{"type":"System.String, mscorlib","value":"1"}'
+    - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.String, mscorlib","value":"0"}'
     - '{"type":"System.Boolean, mscorlib","value":"False"}'
     unityArrayValues: []
     arrayValues:
     - '{"x":0.0,"y":0.0,"z":0.0}'
     - '{"x":10.0,"y":0.0,"z":0.0}'
+    - '{"x":10.0,"y":10.0,"z":0.0}'
+    - '{"x":0.0,"y":10.0,"z":0.0}'
     script: {fileID: 4458252877524076426, guid: d88e9733c90ff4c318c9bac952ae4cb5, type: 3}
     isExpaned: 0
 --- !u!65 &908468523
