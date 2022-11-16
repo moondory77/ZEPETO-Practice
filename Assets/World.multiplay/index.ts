@@ -33,7 +33,6 @@ export default class extends Sandbox {
 
             tween.position = position;
             tween.sendTime = message.sendTime;
-            console.log(tween.position.x);
         });
 
         this.onMessage("onChangedTweenState", (client, message) => {
@@ -114,7 +113,6 @@ export default class extends Sandbox {
         var players = this.state.players;
 
         players.set(client.sessionId, player);
-        console.log([this.state.players][0].keys());
     }
 
     onLeave(client: SandboxPlayer, consented?: boolean) {
@@ -125,6 +123,5 @@ export default class extends Sandbox {
             console.log("master->", this.masterClientSessionId)
         }
 
-        console.log([this.state.players][0].keys);
     }
 }

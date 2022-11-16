@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e8a459e-3d52-4294-abc0-5e9513d0655c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/runConfigurations/Zepeto_Multiplay_Script.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/runConfigurations/Zepeto_Multiplay_Script.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/runConfigurations/Zepeto_Script.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/runConfigurations/Zepeto_Script.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Practice/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/SchemaTypes/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/SchemaTypes/index.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/schemas.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/schemas.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/index.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/index.js.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/relocate-loader.js.cache" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@vercel/ncc/dist/ncc/loaders/relocate-loader.js.cache" afterDir="false" />
     </list>
@@ -81,7 +76,7 @@
       <workItem from="1668387770181" duration="7058000" />
       <workItem from="1668409346603" duration="720000" />
       <workItem from="1668420876034" duration="1330000" />
-      <workItem from="1668563166137" duration="8714000" />
+      <workItem from="1668563166137" duration="17158000" />
     </task>
     <servers />
   </component>

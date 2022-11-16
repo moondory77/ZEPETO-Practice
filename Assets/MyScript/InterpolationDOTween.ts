@@ -5,7 +5,7 @@ import {ZepetoWorldMultiplay} from "ZEPETO.World";
 import {Room, RoomData} from "ZEPETO.Multiplay";
 import multiplaySample from './multiplaySample';
 import SyncIndexManager from './SyncIndexManager';
-import {DOTween} from 'ZEPETO.Multiplay.Schema';
+import {State, DOTween} from 'ZEPETO.Multiplay.Schema';
 
 export enum SyncType {
     Sync = 0,
@@ -70,7 +70,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         this.currentOneWayCount = 0;
         this.isEnd = false;
         this.diffTime = 0;
-        this.Requesting = true;
+        this.Requesting = true;        
         this.isFirst= true;
     }
 
@@ -89,6 +89,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             this.multiplay.RoomJoined += (room: Room) => {
                 this.room = room;
                 this.SyncInit();
+                
             };
         }
     }
@@ -145,6 +146,8 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
     private SyncInit() {
         this.room.Send("CheckServerTimeRequest");
         this.RequestTime = Number(+new Date());
+        
+        this.room.OnStateChange += this.OnStateChange;
 
         this.room.AddMessageHandler("CheckServerTimeResponse", (message: number) => {
             let ResponseTime = Number(+new Date());
@@ -206,7 +209,6 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
     }
 
     private bPaused: boolean;
-
     private OnApplicationPause(pause: boolean) {
         if (pause) {
             this.bPaused = true;
@@ -223,6 +225,17 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
         }
     }
 
+    private OnStateChange(state: State, isFirst: boolean) {
+        if(isFirst) {
+            this.DOTween = state.DOTweens.get_Item(this.Id);
+            console.log(this.DOTween.nowIndex);
+            //this.DOTween.OnChange += (changeValues) => this.OnUpdateTween();
+        }
+    }
+    private OnUpdateTween(){
+        console.log(this.DOTween.nowIndex);
+    }
+    
     private GetServerTime = () => this.diffTime + Number(+new Date());
 
     private* SendMessageLoop(tick: number) {
