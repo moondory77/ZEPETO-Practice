@@ -1,10 +1,11 @@
-import {Time, Vector3} from 'UnityEngine';
+import {Time, Vector3, WaitForSeconds} from 'UnityEngine';
 import {ZepetoScriptBehaviour} from 'ZEPETO.Script'
 import TransformSyncHelper from './TransformSyncHelper';
 import {ZepetoWorldMultiplay} from "ZEPETO.World";
 import {Room, RoomData} from "ZEPETO.Multiplay";
 import multiplaySample from './multiplaySample';
 import SyncIndexManager from './SyncIndexManager';
+import {DOTween} from 'ZEPETO.Multiplay.Schema';
 
 export enum SyncType {
     Sync = 0,
@@ -34,10 +35,6 @@ interface inforTween {
     masterTimeStamp: number,
 }
 
-interface PlayerTimestamp {
-    gameStartTimestamp: number,
-    playerJoinTimestamp: number;
-}
 
 export default class InterpolationDOTween extends ZepetoScriptBehaviour {
 
@@ -56,21 +53,25 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
     private nowIndex: number;
     private nextIndex: number;
 
-    private loopCountDouble: number;    // 끝 지점 도달당 1씩 카운트, 즉 1번 순회 => loopCountDouble 2, 
+    private currentOneWayCount: number;    // 끝 지점 도달당 1씩 카운트, 즉 1번 순회 => currentOneWayCount 2, 
     private isEnd: boolean;
 
     private Requesting: boolean;
     private RequestTime: number;
     private diffTime: number;
 
+    private DOTween: DOTween;
+    private isFirst:boolean;
+
     private Init() {
         this.transform.position = this.TweenPosition[0];
         this.nowIndex = 0;
         this.nextIndex = 1;
-        this.loopCountDouble = 0;
+        this.currentOneWayCount = 0;
         this.isEnd = false;
         this.diffTime = 0;
         this.Requesting = true;
+        this.isFirst= true;
     }
 
     private Start() {
@@ -79,14 +80,13 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             return;
         }
         this.Init();
-        
+
         SyncIndexManager.SyncIndex++;
         this.Id = SyncIndexManager.SyncIndex.toString();
 
         if (this.syncType == SyncType.Sync) {
             this.multiplay = multiplaySample.instance.multiplay;
             this.multiplay.RoomJoined += (room: Room) => {
-                this.Init();
                 this.room = room;
                 this.SyncInit();
             };
@@ -112,29 +112,29 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             case TweenType.Circulation:
                 if (this.nowIndex == this.TweenPosition.length - 1) {
                     this.nextIndex = 0;
-                    this.loopCountDouble++;
+                    this.currentOneWayCount++;
                 } else if (this.nowIndex == 0) {
                     this.nextIndex++;
-                    this.loopCountDouble++;
+                    this.currentOneWayCount++;
                 } else
                     this.nextIndex++;
                 break;
             case TweenType.Linear:
                 if (this.nowIndex == this.TweenPosition.length - 1) {
-                    this.loopCountDouble++;
+                    this.currentOneWayCount++;
                 } else if (this.nowIndex == 0) {
-                    this.loopCountDouble++;
+                    this.currentOneWayCount++;
                 }
-                this.nextIndex = this.loopCountDouble % 2 == 0 ? this.nowIndex + 1 : this.nowIndex - 1;
+                this.nextIndex = this.currentOneWayCount % 2 == 0 ? this.nowIndex + 1 : this.nowIndex - 1;
                 break;
             case TweenType.TeleportFirstPoint:
                 if (this.nowIndex == this.TweenPosition.length - 1) {
                     if (this.loopType != LoopType.JustOneWay) {
                         this.transform.position = this.TweenPosition[0];
-                        this.loopCountDouble++;
+                        this.currentOneWayCount++;
                     }
                     this.nextIndex = 1;
-                    this.loopCountDouble++;
+                    this.currentOneWayCount++;
                 } else {
                     this.nextIndex++;
                 }
@@ -145,7 +145,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
     private SyncInit() {
         this.room.Send("CheckServerTimeRequest");
         this.RequestTime = Number(+new Date());
-        
+
         this.room.AddMessageHandler("CheckServerTimeResponse", (message: number) => {
             let ResponseTime = Number(+new Date());
             let latency = (ResponseTime - this.RequestTime) / 2
@@ -155,7 +155,11 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
 
         const RequestId: string = "RequestPosition" + this.Id;
         this.room.AddMessageHandler(RequestId, (message) => {
-            this.SendPoint();
+            if(this.isFirst) {
+                console.log("isFirst");
+                this.StartCoroutine(this.SendMessageLoop(0.04));
+                this.isFirst = false; 
+            }
         });
 
         const ResponseId: string = "ResponsePosition" + this.Id;
@@ -166,23 +170,22 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
                 let dir = Vector3.Normalize(this.TweenPosition[TmpNextIndex] - getPos);
                 let latency = (this.GetServerTime() - Number(message.masterTimeStamp)) / 1000;
                 let FPS = 1 / Time.fixedDeltaTime; // 유니티 기본 FixedUpdate: 0.02/sec, FPS : 50
-                
+
                 let DiffPos = dir * latency * this.moveSpeed * FPS;
                 let InterpolationPos = getPos + DiffPos;
-                
+
                 let MoveSize = Vector3.SqrMagnitude(this.TweenPosition[TmpNextIndex] - getPos);
-                let InterpolationPosSize = Vector3.SqrMagnitude(InterpolationPos-getPos);
-                console.log("latency="+latency);
+                let InterpolationPosSize = Vector3.SqrMagnitude(InterpolationPos - getPos);
+                console.log("latency=" + latency);
                 // 허용범위 초과시 다시 포지션 Request
-                if(InterpolationPosSize>=MoveSize || latency<0){
+                if (InterpolationPosSize >= MoveSize || latency < 0) {
                     console.log("Re Request....");
                     //위치 재 확인
                     this.room.Send("CheckServerTimeRequest");
                     this.RequestTime = Number(+new Date());
-                }
-                else {
+                } else {
                     this.nextIndex = message.nextIndex;
-                    this.loopCountDouble = message.loopCount;
+                    this.currentOneWayCount = message.loopCount;
                     this.EndCheck();
                     this.Requesting = false;
                     if (!this.SyncInterpolation) {
@@ -196,7 +199,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
 
     private EndCheck() {
         if (this.loopType != LoopType.Repeat) {
-            if (this.loopCountDouble >= this.loopType) {
+            if (this.currentOneWayCount >= this.loopType) {
                 this.isEnd = true;
             }
         }
@@ -212,7 +215,7 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
             if (this.bPaused) {
                 this.bPaused = false;
 
-                this.room.Send("CheckServerTimeRequest");                    
+                this.room.Send("CheckServerTimeRequest");
                 this.RequestTime = Number(+new Date());
 
                 this.Requesting = true;
@@ -222,23 +225,40 @@ export default class InterpolationDOTween extends ZepetoScriptBehaviour {
 
     private GetServerTime = () => this.diffTime + Number(+new Date());
 
+    private* SendMessageLoop(tick: number) {
+        while (true) {
+            yield new WaitForSeconds(tick);
+            if (this.room != null && this.room.IsConnected) {                
+                this.SendState();
+                this.SendPoint();
+            }
+        }
+    }
+
     private SendPoint() {
         const data = new RoomData();
         data.Add("Id", this.Id);
 
         const pos = new RoomData();
-        pos.Add("x", this.transform.localPosition.x);
-        pos.Add("y", this.transform.localPosition.y);
-        pos.Add("z", this.transform.localPosition.z);
+        pos.Add("x", this.transform.position.x);
+        pos.Add("y", this.transform.position.y);
+        pos.Add("z", this.transform.position.z);
         data.Add("position", pos.GetObject());
+        data.Add("sendTime", this.GetServerTime());
 
-        data.Add("nextIndex", this.nextIndex);
-        data.Add("loopCount", this.loopCountDouble);
-        data.Add("masterTimeStamp", this.GetServerTime());
-
-        this.room.Send("SyncTweenOptimization", data.GetObject());
+        this.room.Send("onChangedDOTween", data.GetObject());
     }
 
+    private SendState() {
+        const data = new RoomData();
+        data.Add("Id", this.Id);
+        data.Add("state", 0);
+        data.Add("nowIndex", this.nowIndex);
+        data.Add("nextIndex", this.nextIndex);
+        data.Add("currentOneWayCount", this.currentOneWayCount);
+
+        this.room.Send("onChangedTweenState", data.GetObject());
+    }
 
     private ParseVector3(vector3: Vector3): Vector3 {
         return new Vector3(vector3.x, vector3.y, vector3.z);

@@ -1,18 +1,11 @@
 import {Sandbox, SandboxOptions, SandboxPlayer} from "ZEPETO.Multiplay";
-import {Player, Vector3} from "ZEPETO.Multiplay.Schema";
+import {Player, Vector3, DOTween} from "ZEPETO.Multiplay.Schema";
 
 interface tf {
     Id: string,
     position: Vector3,
     rotation: Vector3,
     scale: Vector3
-}
-
-interface inforTween {
-    Id: string,
-    position: Vector3,
-    nextIndex: number,
-    loopCount: number
 }
 
 interface inforTweenOptimization {
@@ -30,14 +23,31 @@ export default class extends Sandbox {
     private masterClient = () => this.loadPlayer(this.masterClientSessionId);
 
     onCreate(options: SandboxOptions) {
-        this.onMessage("echo", (client, message) => {
-            console.log(`Echo onMessage from ${client.sessionId}, -> ${message}`);
+        this.onMessage("onChangedDOTween", (client, message) => {
+            const tween = this.state.DOTweens.get(message.Id);
 
-            // send current client
-            client.send("echo", "echo to sender : " + message);
+            const position = new Vector3();
+            position.x = message.position.x;
+            position.y = message.position.y;
+            position.z = message.position.z;
 
-            // Broadcast all connected client
-            this.broadcast("echo", "echo to all : " + message);
+            tween.position = position;
+            tween.sendTime = message.sendTime;
+            console.log(tween.position.x);
+        });
+
+        this.onMessage("onChangedTweenState", (client, message) => {
+            let tween: DOTween;
+            if (!this.state.DOTweens.has(message.Id)) {
+                tween = new DOTween();
+                this.state.DOTweens.set(message.Id, tween);
+            } else {
+                tween = this.state.DOTweens.get(message.Id);
+            }
+            tween.state = message.state;
+            tween.nowIndex = message.nowIndex;
+            tween.nextIndex = message.nextIndex;
+            tween.currentOneWayCount = message.currentOneWayCount;
         });
 
         this.onMessage("SyncTransform", (client, message: tf) => {
@@ -48,16 +58,6 @@ export default class extends Sandbox {
                 scale: message.scale
             };
             this.broadcast("SyncTransform" + message.Id, syncTransform);
-        });
-
-        this.onMessage("SyncTween", (client, message: inforTween) => {
-            let syncTween: inforTween = {
-                Id: message.Id,
-                position: message.position,
-                nextIndex: message.nextIndex,
-                loopCount: message.loopCount
-            };
-            this.broadcast("SyncTween" + message.Id, syncTween);
         });
 
         this.onMessage("RequestPosition", (client, message: string) => {
@@ -72,10 +72,10 @@ export default class extends Sandbox {
                 loopCount: message.loopCount,
                 masterTimeStamp: message.masterTimeStamp,
             };
-            //this.broadcast("ResponsePosition" + message.Id, syncTween,{except:this.masterClient()});
-            setTimeout(() => {
+            this.broadcast("ResponsePosition" + message.Id, syncTween, {except: this.masterClient()});
+            /*setTimeout(() => {
                 this.broadcast("ResponsePosition" + message.Id, syncTween, {except: this.masterClient()});
-            }, 1000);
+            }, 1000);*/
         });
 
         this.onMessage("CheckServerTimeRequest", (client, message) => {
@@ -99,7 +99,7 @@ export default class extends Sandbox {
                 this.broadcast("CheckMaster", this.masterClientSessionId);
                 console.log("master->", this.masterClientSessionId)
             }
-        })
+        });
     }
 
     onJoin(client: SandboxPlayer) {
@@ -114,6 +114,7 @@ export default class extends Sandbox {
         var players = this.state.players;
 
         players.set(client.sessionId, player);
+        console.log([this.state.players][0].keys());
     }
 
     onLeave(client: SandboxPlayer, consented?: boolean) {
@@ -123,5 +124,7 @@ export default class extends Sandbox {
             this.broadcast("CheckMaster", this.masterClientSessionId);
             console.log("master->", this.masterClientSessionId)
         }
+
+        console.log([this.state.players][0].keys);
     }
 }

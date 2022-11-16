@@ -6,6 +6,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 	interface State extends Schema {
 		players: MapSchema<Player>;
 		elapsedTime: number;
+		DOTweens: MapSchema<DOTween>;
 	}
 	class Player extends Schema {
 		sessionId: string;
@@ -13,9 +14,6 @@ declare module "ZEPETO.Multiplay.Schema" {
 		zepetoUserId: string;
 		transform: Transform;
 		state: number;
-		isOnBlock: boolean;
-		blockIndex: number;
-		tryJump: boolean;
 	}
 	class Transform extends Schema {
 		position: Vector3;
@@ -25,5 +23,14 @@ declare module "ZEPETO.Multiplay.Schema" {
 		x: number;
 		y: number;
 		z: number;
+	}
+	class DOTween extends Schema {
+		Id: string;
+		nowIndex: number;
+		nextIndex: number;
+		sendTime: number;
+		currentOneWayCount: number;
+		position: Vector3;
+		state: number;
 	}
 }

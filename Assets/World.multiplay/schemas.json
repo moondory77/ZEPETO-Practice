@@ -1,6 +1,7 @@
 {
-"State" : {"players" : {"map" : "Player"},"elapsedTime" : "number"},
-"Player" : {"sessionId" : "string","zepetoHash" : "string","zepetoUserId" : "string","transform" : "Transform","state" : "number","isOnBlock" : "boolean","blockIndex" : "number","tryJump" : "boolean"},
+"State" : {"players" : {"map" : "Player"},"elapsedTime" : "number","DOTweens" : {"map" : "DOTween"}},
+"Player" : {"sessionId" : "string","zepetoHash" : "string","zepetoUserId" : "string","transform" : "Transform","state" : "number"},
 "Transform" : {"position" : "Vector3","rotation" : "Vector3"},
-"Vector3" : {"x" : "number","y" : "number","z" : "number"}
+"Vector3" : {"x" : "number","y" : "number","z" : "number"},
+"DOTween" : {"Id" : "string","nowIndex" : "number","nextIndex" : "number","sendTime" : "number","currentOneWayCount" : "number","position" : "Vector3","state" : "number"}
 }
