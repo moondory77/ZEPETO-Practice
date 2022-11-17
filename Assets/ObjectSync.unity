@@ -1478,17 +1478,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script:
     keys:
-    - SyncPosition
-    - SyncRotation
     - SyncScale
+    - SyncRotation
+    - SyncPosition
     unityValues:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     values:
-    - '{"type":"System.Boolean, mscorlib","value":"True"}'
-    - '{"type":"System.Boolean, mscorlib","value":"True"}'
     - '{"type":"System.Boolean, mscorlib","value":"False"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
+    - '{"type":"System.Boolean, mscorlib","value":"True"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 5419c5d1d2ede4cde844dd059edfebce, type: 3}

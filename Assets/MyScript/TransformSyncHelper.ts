@@ -26,6 +26,8 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     private room: Room;
     private Id: string="";
 
+    private syncTransform: SyncTransform;
+    
     Start() {
         SyncIndexManager.SyncIndex++;
         this.Id = SyncIndexManager.SyncIndex.toString();
@@ -88,16 +90,50 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     }
     private OnStateChange(state: State, isFirst: boolean){
         // When the first OnStateChange event is received, a full state snapshot is recorded.
-        if(this.isMasterClient)
-            return;
+        
         if (isFirst) {
-            const syncTransform: SyncTransform = new SyncTransform();
             // [RoomState] Called whenever the state of the player instance is updated. 
-            state.SyncTransforms.get_Item(this.Id).OnChange += (changeValues) => this.OnUpdateTransform(syncTransform);
+            this.syncTransform = state.SyncTransforms.get_Item(this.Id);
+            const tf = this.syncTransform;
+            state.SyncTransforms.OnChange += (changeValues) => this.OnUpdateTransform(tf);
+        }
+        console.log(this.syncTransform.position.x);
+        if(!this.isMasterClient) {
+            if (this.SyncPosition) {
+                const tempPos: Vector3 = new Vector3(this.syncTransform.position.x,this.syncTransform.position.y,this.syncTransform.position.z);
+                if (tempPos != this.transform.position)
+                    this.transform.position = tempPos;
+            }
+            if (this.SyncRotation) {
+                const tempRot: Vector3 = new Vector3(this.syncTransform.rotation.x,this.syncTransform.rotation.y,this.syncTransform.rotation.z);
+                if (tempRot != this.transform.rotation.eulerAngles)
+                    this.transform.rotation = Quaternion.Euler(tempRot);
+            }
+            if (this.SyncScale) {
+                const tempScale: Vector3 = new Vector3(this.syncTransform.scale.x,this.syncTransform.scale.y,this.syncTransform.scale.z);
+                if (tempScale != this.transform.localScale)
+                    this.transform.localScale = tempScale;
+            }
         }
     }
     private OnUpdateTransform(syncTransform : SyncTransform){
-        console.log(syncTransform.position.x);
+        if(!this.isMasterClient) {
+            if (this.SyncPosition) {
+                const tempPos: Vector3 = new Vector3(this.syncTransform.position.x,this.syncTransform.position.y,this.syncTransform.position.z);
+                if (tempPos != this.transform.position)
+                    this.transform.position = tempPos;
+            }
+            if (this.SyncRotation) {
+                const tempRot: Vector3 = new Vector3(this.syncTransform.rotation.x,this.syncTransform.rotation.y,this.syncTransform.rotation.z);
+                if (tempRot != this.transform.rotation.eulerAngles)
+                    this.transform.rotation = Quaternion.Euler(tempRot);
+            }
+            if (this.SyncScale) {
+                const tempScale: Vector3 = new Vector3(this.syncTransform.scale.x,this.syncTransform.scale.y,this.syncTransform.scale.z);
+                if (tempScale != this.transform.localScale)
+                    this.transform.localScale = tempScale;
+            }
+        }
     }
     
     //트랜스폼 변경 확인
