@@ -7,6 +7,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 		players: MapSchema<Player>;
 		elapsedTime: number;
 		DOTweens: MapSchema<DOTween>;
+		SyncTransforms: MapSchema<SyncTransform>;
 	}
 	class Player extends Schema {
 		sessionId: string;
@@ -34,6 +35,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 		state: number;
 	}
 	class SyncTransform extends Schema {
+		Id: string;
 		position: Vector3;
 		rotation: Vector3;
 		scale: Vector3;

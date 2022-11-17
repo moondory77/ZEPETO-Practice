@@ -6,7 +6,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/runConfigurations/Zepeto_Script.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/runConfigurations/Zepeto_Script.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/TransformSyncHelper.ts.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ObjectSync.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ObjectSync.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/SchemaTypes/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/SchemaTypes/index.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/schemas.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/schemas.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +48,7 @@
       <updated>1668132797054</updated>
       <workItem from="1668132803652" duration="18636000" />
       <workItem from="1668233429486" duration="2785000" />
+      <workItem from="1668669457363" duration="4388000" />
     </task>
     <servers />
   </component>

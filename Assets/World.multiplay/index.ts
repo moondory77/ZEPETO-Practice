@@ -1,5 +1,5 @@
 import {Sandbox, SandboxOptions, SandboxPlayer} from "ZEPETO.Multiplay";
-import {Player, Vector3, DOTween} from "ZEPETO.Multiplay.Schema";
+import {Player, Vector3, DOTween, SyncTransform} from "ZEPETO.Multiplay.Schema";
 
 interface tf {
     Id: string,
@@ -23,6 +23,11 @@ export default class extends Sandbox {
     private masterClient = () => this.loadPlayer(this.masterClientSessionId);
 
     onCreate(options: SandboxOptions) {
+        for(let i=0; i<10; i++) {
+            let syncTransform = new SyncTransform();
+            this.state.SyncTransforms.set(i.toString(), syncTransform);
+        }
+            
         this.onMessage("onChangedDOTween", (client, message) => {
             const tween = this.state.DOTweens.get(message.Id);
 
@@ -50,13 +55,31 @@ export default class extends Sandbox {
         });
 
         this.onMessage("SyncTransform", (client, message: tf) => {
-            let syncTransform: tf = {
-                Id: message.Id,
-                position: message.position,
-                rotation: message.rotation,
-                scale: message.scale
-            };
-            this.broadcast("SyncTransform" + message.Id, syncTransform);
+            let syncTransform : SyncTransform;
+            if (this.state.SyncTransforms.has(message.Id)) {
+                syncTransform = this.state.SyncTransforms.get(message.Id);
+            } else {
+                syncTransform = new SyncTransform();
+                this.state.SyncTransforms.set(message.Id, syncTransform);
+            }
+            syncTransform.Id = message.Id;
+            
+            syncTransform.position = new Vector3();
+            syncTransform.position.x = message.position.x;
+            syncTransform.position.y = message.position.y;
+            syncTransform.position.z = message.position.z;
+            
+            syncTransform.rotation = new Vector3();
+            syncTransform.rotation.x = message.rotation.x;
+            syncTransform.rotation.y = message.rotation.y;
+            syncTransform.rotation.z = message.rotation.z;
+            
+            syncTransform.scale = new Vector3();
+            syncTransform.scale.x = message.scale.x;
+            syncTransform.scale.y = message.scale.y;
+            syncTransform.scale.z = message.scale.z;
+            
+            console.log(syncTransform.Id);
         });
 
         this.onMessage("RequestPosition", (client, message: string) => {

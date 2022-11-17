@@ -5,6 +5,7 @@ import {Room, RoomData} from "ZEPETO.Multiplay";
 import {ZepetoWorldMultiplay} from "ZEPETO.World";
 import {ZepetoPlayers} from "ZEPETO.Character.Controller";
 import SyncIndexManager from "./SyncIndexManager";
+import { State, SyncTransform } from "ZEPETO.Multiplay.Schema";
 
 interface tf {
     Id: string,
@@ -53,35 +54,52 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
             this.room.AddMessageHandler("CheckMaster", (MasterClientSessionId) => {
                 if (this.room.SessionId == MasterClientSessionId) {
                     //처음 마스터가 되면
-                    if(!this.isMasterClient) {
+                    if(!this.isMasterClient) {                    
+                        console.log("ImMasterClient");
                         this.isMasterClient = true;
                         this.StartCoroutine(this.CheckChangeTransform(0.04));
                     }
                     this.SendTransform(this.transform);
-                    console.log("ImMasterClient");
                 }
-                else
-                    this.room.AddMessageHandler(syncId, (message: tf) => {
-                        if (this.SyncPosition) {
-                            const tempPos: Vector3 = this.ParseVector3(message.position);
-                            if (tempPos != this.transform.position)
-                                this.transform.position = tempPos;
-                        }
-                        if (this.SyncRotation) {
-                            const tempRot: Vector3 = this.ParseVector3(message.rotation);
-                            if (tempRot != this.transform.rotation.eulerAngles)
-                                this.transform.rotation = Quaternion.Euler(tempRot);
-                        }
-                        if (this.SyncScale) {
-                            const tempScale: Vector3 = this.ParseVector3(message.scale);
-                            if (tempScale != this.transform.localScale)
-                                this.transform.localScale = tempScale;
-                        }
-                    });
             });
-        };
-    }
 
+            this.room.OnStateChange += this.OnStateChange;
+        };
+
+        this.room.AddMessageHandler(syncId, (message: tf) => {
+            if(!this.isMasterClient) {
+                if (this.SyncPosition) {
+                    const tempPos: Vector3 = this.ParseVector3(message.position);
+                    if (tempPos != this.transform.position)
+                        this.transform.position = tempPos;
+                }
+                if (this.SyncRotation) {
+                    const tempRot: Vector3 = this.ParseVector3(message.rotation);
+                    if (tempRot != this.transform.rotation.eulerAngles)
+                        this.transform.rotation = Quaternion.Euler(tempRot);
+                }
+                if (this.SyncScale) {
+                    const tempScale: Vector3 = this.ParseVector3(message.scale);
+                    if (tempScale != this.transform.localScale)
+                        this.transform.localScale = tempScale;
+                }
+            }
+        });
+    }
+    private OnStateChange(state: State, isFirst: boolean){
+        // When the first OnStateChange event is received, a full state snapshot is recorded.
+        if(this.isMasterClient)
+            return;
+        if (isFirst) {
+            const syncTransform: SyncTransform = new SyncTransform();
+            // [RoomState] Called whenever the state of the player instance is updated. 
+            state.SyncTransforms.get_Item(this.Id).OnChange += (changeValues) => this.OnUpdateTransform(syncTransform);
+        }
+    }
+    private OnUpdateTransform(syncTransform : SyncTransform){
+        console.log(syncTransform.position.x);
+    }
+    
     //트랜스폼 변경 확인
     * CheckChangeTransform(tick: number) {
         let pastPos: Vector3 = this.transform.position;
