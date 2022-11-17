@@ -6,9 +6,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/runConfigurations/Zepeto_Script.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/runConfigurations/Zepeto_Script.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ZEPETO-Practice/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MyScript/InterpolationDOTween.ts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World.multiplay/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ObjectSync.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ObjectSync.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

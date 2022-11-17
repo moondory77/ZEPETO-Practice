@@ -33,4 +33,9 @@ declare module "ZEPETO.Multiplay.Schema" {
 		position: Vector3;
 		state: number;
 	}
+	class SyncTransform extends Schema {
+		position: Vector3;
+		rotation: Vector3;
+		scale: Vector3;
+	}
 }
