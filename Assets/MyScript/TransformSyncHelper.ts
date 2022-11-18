@@ -1,4 +1,4 @@
-import {Transform, Vector3, WaitForSeconds, Quaternion} from "UnityEngine";
+import {Transform, Vector3, WaitForSeconds, Quaternion, Time, Rigidbody} from "UnityEngine";
 import {ZepetoScriptBehaviour} from "ZEPETO.Script";
 import multiplaySample from "./multiplaySample";
 import {Room, RoomData} from "ZEPETO.Multiplay";
@@ -16,7 +16,6 @@ interface tf {
 
 export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     @HideInInspector() public isMasterClient: boolean = false;
-    @HideInInspector() public isSync: boolean = false;
 
     @SerializeField() private SyncPosition: boolean = true;
     @SerializeField() private SyncRotation: boolean = true;
@@ -33,10 +32,6 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
         this.Id = SyncIndexManager.SyncIndex.toString();
         //하나라도 동기화 하면
         if (this.SyncPosition || this.SyncRotation || this.SyncScale) {
-            this.isSync = true;
-        }
-
-        if (this.isSync) {
             this.multiplay = multiplaySample.instance.multiplay;
             this.SyncTransform();
         }
@@ -61,77 +56,40 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
                         this.isMasterClient = true;
                         this.StartCoroutine(this.CheckChangeTransform(0.04));
                     }
-                    this.SendTransform(this.transform);
                 }
             });
 
+
             this.room.OnStateChange += this.OnStateChange;
         };
-
-        this.room.AddMessageHandler(syncId, (message: tf) => {
-            if(!this.isMasterClient) {
-                if (this.SyncPosition) {
-                    const tempPos: Vector3 = this.ParseVector3(message.position);
-                    if (tempPos != this.transform.position)
-                        this.transform.position = tempPos;
-                }
-                if (this.SyncRotation) {
-                    const tempRot: Vector3 = this.ParseVector3(message.rotation);
-                    if (tempRot != this.transform.rotation.eulerAngles)
-                        this.transform.rotation = Quaternion.Euler(tempRot);
-                }
-                if (this.SyncScale) {
-                    const tempScale: Vector3 = this.ParseVector3(message.scale);
-                    if (tempScale != this.transform.localScale)
-                        this.transform.localScale = tempScale;
-                }
-            }
-        });
     }
     private OnStateChange(state: State, isFirst: boolean){
-        // When the first OnStateChange event is received, a full state snapshot is recorded.
-        
         if (isFirst) {
-            // [RoomState] Called whenever the state of the player instance is updated. 
-            this.syncTransform = state.SyncTransforms.get_Item(this.Id);
-            const tf = this.syncTransform;
-            state.SyncTransforms.OnChange += (changeValues) => this.OnUpdateTransform(tf);
+            this.syncTransform = state?.SyncTransforms?.get_Item(this.Id);
         }
-        console.log(this.syncTransform.position.x);
-        if(!this.isMasterClient) {
-            if (this.SyncPosition) {
-                const tempPos: Vector3 = new Vector3(this.syncTransform.position.x,this.syncTransform.position.y,this.syncTransform.position.z);
-                if (tempPos != this.transform.position)
-                    this.transform.position = tempPos;
-            }
-            if (this.SyncRotation) {
-                const tempRot: Vector3 = new Vector3(this.syncTransform.rotation.x,this.syncTransform.rotation.y,this.syncTransform.rotation.z);
-                if (tempRot != this.transform.rotation.eulerAngles)
-                    this.transform.rotation = Quaternion.Euler(tempRot);
-            }
-            if (this.SyncScale) {
-                const tempScale: Vector3 = new Vector3(this.syncTransform.scale.x,this.syncTransform.scale.y,this.syncTransform.scale.z);
-                if (tempScale != this.transform.localScale)
-                    this.transform.localScale = tempScale;
-            }
-        }
+        
     }
-    private OnUpdateTransform(syncTransform : SyncTransform){
-        if(!this.isMasterClient) {
+    private FixedUpdate(){
+        if(this.isMasterClient){
+            return;
+        }
+        
+        if(!this.isMasterClient && null!=this.syncTransform) {
             if (this.SyncPosition) {
                 const tempPos: Vector3 = new Vector3(this.syncTransform.position.x,this.syncTransform.position.y,this.syncTransform.position.z);
-                if (tempPos != this.transform.position)
-                    this.transform.position = tempPos;
+                if (tempPos != this.transform.position){
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, tempPos, 10);
+                }
             }
             if (this.SyncRotation) {
                 const tempRot: Vector3 = new Vector3(this.syncTransform.rotation.x,this.syncTransform.rotation.y,this.syncTransform.rotation.z);
                 if (tempRot != this.transform.rotation.eulerAngles)
-                    this.transform.rotation = Quaternion.Euler(tempRot);
+                    this.transform.rotation = Quaternion.Euler(Vector3.MoveTowards(this.transform.eulerAngles, tempRot, 10));
             }
             if (this.SyncScale) {
                 const tempScale: Vector3 = new Vector3(this.syncTransform.scale.x,this.syncTransform.scale.y,this.syncTransform.scale.z);
                 if (tempScale != this.transform.localScale)
-                    this.transform.localScale = tempScale;
+                    this.transform.localScale = Vector3.MoveTowards(this.transform.localScale, tempScale, 10);
             }
         }
     }
@@ -164,7 +122,7 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
             }
             //변한 값이 있으면 전송
             if(syncNowFrame) {
-                this.SendTransform(this.transform);
+                this.SendTransform();
                 syncNowFrame = false;
             }
                 
@@ -172,26 +130,26 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
         }
     }
 
-    private SendTransform(transform: Transform) {
+    private SendTransform() {
         const data = new RoomData();
         data.Add("Id", this.Id);
 
         const pos = new RoomData();
-        pos.Add("x", transform.localPosition.x);
-        pos.Add("y", transform.localPosition.y);
-        pos.Add("z", transform.localPosition.z);
+        pos.Add("x", this.transform.localPosition.x);
+        pos.Add("y", this.transform.localPosition.y);
+        pos.Add("z", this.transform.localPosition.z);
         data.Add("position", pos.GetObject());
 
         const rot = new RoomData();
-        rot.Add("x", transform.localEulerAngles.x);
-        rot.Add("y", transform.localEulerAngles.y);
-        rot.Add("z", transform.localEulerAngles.z);
+        rot.Add("x", this.transform.localEulerAngles.x);
+        rot.Add("y", this.transform.localEulerAngles.y);
+        rot.Add("z", this.transform.localEulerAngles.z);
         data.Add("rotation", rot.GetObject());
 
         const scale = new RoomData();
-        scale.Add("x", transform.localScale.x);
-        scale.Add("y", transform.localScale.y);
-        scale.Add("z", transform.localScale.z);
+        scale.Add("x", this.transform.localScale.x);
+        scale.Add("y", this.transform.localScale.y);
+        scale.Add("z", this.transform.localScale.z);
         data.Add("scale", scale.GetObject());
         this.room.Send("SyncTransform", data.GetObject());
     }

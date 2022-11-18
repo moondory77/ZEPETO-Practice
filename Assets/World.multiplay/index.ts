@@ -27,7 +27,7 @@ export default class extends Sandbox {
             let syncTransform = new SyncTransform();
             this.state.SyncTransforms.set(i.toString(), syncTransform);
         }
-            
+
         this.onMessage("onChangedDOTween", (client, message) => {
             const tween = this.state.DOTweens.get(message.Id);
 
@@ -79,7 +79,6 @@ export default class extends Sandbox {
             syncTransform.scale.y = message.scale.y;
             syncTransform.scale.z = message.scale.z;
             
-            console.log(syncTransform.Id);
         });
 
         this.onMessage("RequestPosition", (client, message: string) => {
@@ -112,7 +111,6 @@ export default class extends Sandbox {
             }
             this.broadcast("CheckMaster", this.masterClientSessionId);
         });
-
         this.onMessage("PausePlayer", (client) => {
             this.sessionIdQueue.splice((this.sessionIdQueue.indexOf(client.sessionId)), 1)
             this.sessionIdQueue.push(client.sessionId.toString());
